@@ -1,0 +1,114 @@
+{
+  "manifest_version": 3,
+  "name": "Amazon & Flipkart Price Checker",
+  "version": "1.0",
+  "description": "Compare prices on Amazon and Flipkart with your sheet prices.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://script.google.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.amazon.in/*",
+        "https://www.amazon.in/cart"
+      ],
+      "js": [
+        "content.js",
+        "amazondc.js",
+        "amazoncart.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.flipkart.com/viewcart*"
+      ],
+      "js": [
+        "flipkartcart.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.flipkart.com/*/p/*"
+      ],
+      "js": [
+        "flipkart.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.flipkart.com/*"
+      ],
+      "js": [
+        "flipkartdc.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.nykaa.com/*"
+      ],
+      "js": [
+        "nykaa.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.amazon.in/*",
+        "https://amazon.in/*",
+        "https://www.flipkart.com/*",
+        "https://flipkart.com/*",
+        "https://www.zeptonow.com/*",
+        "https://zeptonow.com/*",
+        "https://pizzaonline.dominos.co.in/*",
+        "https://dominos.co.in/*",
+        "https://www.uber.com/*",
+        "https://uber.com/*",
+        "https://www.zomato.com/*",
+        "https://zomato.com/*",
+        "https://www.jockey.com/*",
+        "https://jockey.com/*",
+        "https://www.nykaa.com/*",
+        "https://nykaa.com/*",
+        "https://www.swiggy.com/*",
+        "https://swiggy.com/*",
+        "https://www.bigbasket.com/*",
+        "https://bigbasket.com/*",
+        "https://www.myntra.com/*",
+        "https://myntra.com/*",
+        "https://www.primevideo.com/*",
+        "https://primevideo.com/*"
+      ],
+      "js": [
+        "gc.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icon.png",
+        "icon_1.png",
+        "icon_2.png",
+        "icon_3.png",
+        "icon_4.png",
+        "FunnelDisplay.ttf",
+        "icon_w.png",
+        "settings.svg",
+        "info.svg",
+        "coupon.svg",
+        "gc.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  }
+}

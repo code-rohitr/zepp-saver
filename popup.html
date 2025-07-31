@@ -1,0 +1,152 @@
+<div id="zepp-ui">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-width: 400px;
+            border-radius: 11px;
+        }
+
+        #zepp-ui {
+            font-family: Arial, sans-serif;
+            width: 100%;
+            color: #333;
+        }
+
+        .zepp-header {
+            width: 100%;
+            height: 20%;
+            background: linear-gradient(to right, rgba(104, 122, 228, 1), rgba(116, 82, 171, 1));
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+
+        .zepp-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .zepp-header-top button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .zepp-header-top img {
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .zepp-header-title {
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .zepp-section {
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .zepp-subtitle {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #687AE4;
+        }
+
+        .zepp-about {
+            margin-bottom: 20px;
+        }
+
+        .zepp-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            background: #242424;
+            transition: all 0.2s ease;
+        }
+
+        .zepp-cta:hover {
+            background: #687AE4;
+            color: #ffffff;
+        }
+
+        .zepp-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            font-size: 10px;
+            padding-bottom: 10px;
+        }
+
+        .zepp-footer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            text-align: center;
+        }
+
+        .zepp-footer-item img {
+            height: 40px;
+            width: 40px;
+        }
+
+        .zepp-footer-item p {
+            font-size: 10px;
+            line-height: 150%;
+            margin-top: 10px;
+        }
+    </style>
+
+    <div class="zepp-header">
+        <div class="zepp-header-title">About <strong>ZEPP</strong></div>
+    </div>
+
+    <div class="zepp-section">
+        <div class="zepp-subtitle">What is ZEPP?</div>
+        <div class="zepp-about">
+            ZEPP (Student Purchase Program) is India's most trusted shopping destination for students, parents, and
+            educators.
+            We partner directly with top brands to bring you authentic, brand-new electronics and lifestyle products at
+            the best possible prices.
+        </div>
+
+        <div class="zepp-subtitle">Why Shop on ZEPP?</div>
+        <ul class="zepp-about">
+            <li>Exclusive student pricing and offers</li>
+            <li>Direct brand delivery, no third-party sellers</li>
+            <li>Genuine products with brand warranties</li>
+            <li>Zero hidden costs. Transparent pricing.</li>
+            <li>Free shipping and guaranteed cashback</li>
+        </ul>
+
+        <a id="ctaBtn" class="zepp-cta" href="https://zepp.studentpurchaseprogram.com/" target="_blank">
+            <img id="zeppIcon" style="height: 24px;" />
+            Visit ZEPP Now
+        </a>
+    </div>
+</div>
+
