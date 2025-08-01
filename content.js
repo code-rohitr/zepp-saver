@@ -75,15 +75,303 @@ function waitForASINandPrice(timeout = 7000, interval = 200) {
 }
 
 async function injectAutoPopupWrapper() {
+  console.log("🚀 Starting popup injection...");
   try {
     const { asin, price } = await waitForASINandPrice();
+    console.log("✅ Found ASIN:", asin, "Price:", price);
     injectAutoPopup(asin, price);
   } catch (err) {
-    console.warn(err.message);
+    console.warn("❌ Popup injection failed:", err.message);
   }
 }
 
-function injectAutoPopup(asin, price) {
+async function checkAuthStatus() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['authData'], (result) => {
+      const authData = result.authData;
+      resolve(authData && authData.isAuthenticated ? authData : null);
+    });
+  });
+}
+
+function openLoginModal() {
+  // Remove any existing login modal
+  const existingModal = document.getElementById('zepp-login-modal');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  const modal = document.createElement('div');
+  modal.id = 'zepp-login-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  `;
+
+  modal.innerHTML = `
+    <div style="
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      width: 400px;
+      max-width: 90vw;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    ">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="color: #242424; margin: 0 0 8px 0; font-size: 24px;">Student Verification</h2>
+        <p style="color: #666; margin: 0; font-size: 14px;">Enter your student email to get exclusive discounts</p>
+      </div>
+      
+      <div id="emailStep">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Student Email</label>
+          <input 
+            type="email" 
+            id="studentEmail" 
+            placeholder="your.name@university.edu"
+            style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e1e5e9;
+              border-radius: 8px;
+              font-size: 16px;
+              box-sizing: border-box;
+            "
+          />
+        </div>
+        <button 
+          id="sendOtpBtn"
+          style="
+            width: 100%;
+            padding: 12px;
+            background: #687AE4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+          "
+        >
+          Send OTP
+        </button>
+      </div>
+      
+      <div id="otpStep" style="display: none;">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Enter OTP</label>
+          <input 
+            type="text" 
+            id="otpCode" 
+            placeholder="123456"
+            maxlength="6"
+            style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e1e5e9;
+              border-radius: 8px;
+              font-size: 16px;
+              text-align: center;
+              box-sizing: border-box;
+            "
+          />
+        </div>
+        <button 
+          id="verifyOtpBtn"
+          style="
+            width: 100%;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+          "
+        >
+          Verify & Login
+        </button>
+        <button 
+          id="backToEmailBtn"
+          style="
+            width: 100%;
+            padding: 8px;
+            background: none;
+            color: #687AE4;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+          "
+        >
+          ← Back to email
+        </button>
+      </div>
+      
+      <div style="text-align: center;">
+        <button 
+          id="closeLoginModal"
+          style="
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+          "
+        >
+          Cancel
+        </button>
+      </div>
+      
+      <div id="loginMessage" style="
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        text-align: center;
+        display: none;
+      "></div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Event listeners
+  document.getElementById('closeLoginModal').addEventListener('click', () => {
+    modal.remove();
+  });
+
+  document.getElementById('sendOtpBtn').addEventListener('click', handleSendOtp);
+  document.getElementById('verifyOtpBtn').addEventListener('click', handleVerifyOtp);
+  document.getElementById('backToEmailBtn').addEventListener('click', () => {
+    document.getElementById('emailStep').style.display = 'block';
+    document.getElementById('otpStep').style.display = 'none';
+  });
+
+  // Close modal when clicking outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+}
+
+async function handleSendOtp() {
+  const emailInput = document.getElementById('studentEmail');
+  const email = emailInput.value.trim();
+  const messageDiv = document.getElementById('loginMessage');
+  const sendBtn = document.getElementById('sendOtpBtn');
+
+  if (!email) {
+    showLoginMessage('Please enter your email address', 'error');
+    return;
+  }
+
+  if (!isValidStudentEmail(email)) {
+    showLoginMessage('Please enter a valid email address', 'error');
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'Sending...';
+
+  // Dummy OTP functionality - simulate API call
+  setTimeout(() => {
+    // Generate dummy OTP and store it
+    const dummyOtp = '123456'; // Fixed OTP for testing
+    localStorage.setItem('zepp_dummy_otp', dummyOtp);
+    localStorage.setItem('zepp_dummy_email', email);
+    
+    showLoginMessage('OTP sent to your email! Use: 123456', 'success');
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('otpStep').style.display = 'block';
+    
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Send OTP';
+  }, 1000); // Simulate 1 second delay
+}
+
+async function handleVerifyOtp() {
+  const emailInput = document.getElementById('studentEmail');
+  const otpInput = document.getElementById('otpCode');
+  const email = emailInput.value.trim();
+  const otp = otpInput.value.trim();
+  const verifyBtn = document.getElementById('verifyOtpBtn');
+
+  if (!otp) {
+    showLoginMessage('Please enter the OTP', 'error');
+    return;
+  }
+
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = 'Verifying...';
+
+  // Dummy OTP verification
+  setTimeout(async () => {
+    const storedOtp = localStorage.getItem('zepp_dummy_otp');
+    const storedEmail = localStorage.getItem('zepp_dummy_email');
+
+    if (otp === storedOtp && email === storedEmail) {
+      // Store authentication data
+      await chrome.storage.local.set({
+        authData: {
+          isAuthenticated: true,
+          email: email,
+          timestamp: Date.now()
+        }
+      });
+
+      // Clean up dummy data
+      localStorage.removeItem('zepp_dummy_otp');
+      localStorage.removeItem('zepp_dummy_email');
+
+      showLoginMessage('Login successful!', 'success');
+      
+      setTimeout(() => {
+        document.getElementById('zepp-login-modal').remove();
+        // Refresh the popup to show prices
+        location.reload();
+      }, 1500);
+    } else {
+      showLoginMessage('Invalid OTP. Please try: 123456', 'error');
+    }
+
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = 'Verify & Login';
+  }, 500); // Simulate verification delay
+}
+
+function showLoginMessage(message, type) {
+  const messageDiv = document.getElementById('loginMessage');
+  messageDiv.textContent = message;
+  messageDiv.style.display = 'block';
+  messageDiv.style.backgroundColor = type === 'error' ? '#fee' : '#efe';
+  messageDiv.style.color = type === 'error' ? '#c33' : '#363';
+  messageDiv.style.border = `1px solid ${type === 'error' ? '#fcc' : '#cfc'}`;
+}
+
+function isValidStudentEmail(email) {
+  // Accept any valid email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+async function injectAutoPopup(asin, price) {
+  console.log("🎯 Injecting popup with ASIN:", asin, "Price:", price);
+  
   document.querySelectorAll('.zepp-extension-popup').forEach(el => el.remove());
   document.querySelectorAll('[zepp-trigger-icon]').forEach(el => el.remove());
 
@@ -124,6 +412,10 @@ function injectAutoPopup(asin, price) {
   popup.style.transform = 'translateY(-10px)';
   popup.style.display = 'none';
 
+  // Check authentication status
+  const authData = await checkAuthStatus();
+  const isAuthenticated = authData && authData.isAuthenticated;
+
   popup.innerHTML = `
     <div style="width: 100%; height: 20%; background: linear-gradient(to right, #242424, #242424); color: white; padding: 10px 20px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -139,18 +431,30 @@ function injectAutoPopup(asin, price) {
       </div>
     </div>
     <div style="padding: 0 20px;">
-      <div style="display: flex; font-size: 16px; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #ddd;">
-        <span>Amazon Price</span>
-        <span id="amazonPrice" style="font-weight: 600;">₹${price ?? 'Unavailable'}</span>
+      <div id="priceSection" style="display: ${isAuthenticated ? 'block' : 'none'};">
+        <div style="display: flex; font-size: 16px; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #ddd;">
+          <span>Amazon Price</span>
+          <span id="amazonPrice" style="font-weight: 600;">₹${price ?? 'Unavailable'}</span>
+        </div>
+        <div style="display: flex; font-size: 16px; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #ddd;">
+          <span>ZEPP Price</span>
+          <span id="sheetPrice" style="font-weight: 600; color: #687AE4;">Loading...</span>
+        </div>
+        <div style="text-align: center; margin-top: 16px;">
+          <div style="font-size: 16px; color: #444;">Shop on ZEPP and save</div>
+          <div id="savings" style="font-size: 28px; font-weight: 700; color: #687AE4; margin-top: 10px;"></div>
+        </div>
       </div>
-      <div style="display: flex; font-size: 16px; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #ddd;">
-        <span>ZEPP Price</span>
-        <span id="sheetPrice" style="font-weight: 600; color: #687AE4;">Loading...</span>
+      
+      <div id="authPrompt" style="display: ${isAuthenticated ? 'none' : 'block'}; text-align: center; padding: 20px 0;">
+        <div style="font-size: 16px; color: #444; margin-bottom: 16px;">
+          Unlock Exclusive Student Discounts - Verify your Student ID
+        </div>
+        <a id="loginLink" href="#" style="color: #687AE4; text-decoration: underline; font-weight: bold; cursor: pointer;">
+          Login now
+        </a>
       </div>
-      <div style="text-align: center; margin-top: 16px;">
-        <div style="font-size: 16px; color: #444;">Shop on ZEPP and save</div>
-        <div id="savings" style="font-size: 28px; font-weight: 700; color: #687AE4; margin-top: 10px;"></div>
-      </div>
+      
       <style>
         #ctaBtn {
           transition: all 0.2s ease;
@@ -187,7 +491,7 @@ function injectAutoPopup(asin, price) {
             <strong>C</strong>ashback on Every Order
           </p>
         </div>
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 80px;">
+        <div style="display: flex; flex-direction: column; align-items: centers; justify-content: center; width: 80px;">
           <img id="icon4" style="height: 40px; width: 40px;" />
           <p style="font-size: 10px; line-height: 150%; margin-top: 10px; text-align: center;">
             <strong>D</strong>irect Delivery from Brands
@@ -236,6 +540,15 @@ function injectAutoPopup(asin, price) {
       triggerIcon.style.opacity = '1';
     }, 300);
   });
+
+  // Add login link handler
+  const loginLink = document.getElementById('loginLink');
+  if (loginLink && !isAuthenticated) {
+    loginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLoginModal();
+    });
+  }
 
   triggerIcon.addEventListener('click', () => {
     if (popup.style.display === 'block') {
@@ -353,6 +666,19 @@ function onUrlChange(callback) {
   window.addEventListener('replaceState', () => callback());
   window.addEventListener('popstate', () => callback());
 }
+
+// ---- MESSAGE LISTENER FOR POPUP COMMUNICATION ----
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === "OPEN_LOGIN_MODAL") {
+    openLoginModal();
+    sendResponse({ success: true });
+  } else if (request.type === "GET_PRICE_INFO") {
+    const asin = getASIN();
+    const price = extractAmazonPrice();
+    sendResponse({ amazonPrice: price, asin: asin });
+  }
+  return true;
+});
 
 // ---- RUN SCRIPT ON INITIAL LOAD AND EVERY URL CHANGE ----
 

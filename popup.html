@@ -126,6 +126,35 @@
     </div>
 
     <div class="zepp-section">
+        <!-- User Info Section (shows when authenticated) -->
+        <div id="userInfo" style="display: none;"></div>
+
+        <!-- Price Comparison Section (shows when authenticated) -->
+        <div id="priceSection" style="display: none;">
+            <div class="zepp-subtitle">Price Comparison</div>
+            <div style="display: flex; font-size: 16px; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #ddd;">
+                <span>Amazon Price</span>
+                <span id="amazonPrice" style="font-weight: 600;">Loading...</span>
+            </div>
+            <div style="display: flex; font-size: 16px; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #ddd;">
+                <span>ZEPP Price</span>
+                <span id="sheetPrice" style="font-weight: 600; color: #687AE4;">Loading...</span>
+            </div>
+            <div style="text-align: center; margin: 16px 0;">
+                <div id="savings" style="font-size: 18px; font-weight: 700; color: #687AE4;"></div>
+            </div>
+        </div>
+
+        <!-- Authentication Prompt (shows when not authenticated) -->
+        <div id="authPrompt" style="display: block; text-align: center; padding: 20px 0;">
+            <div style="font-size: 16px; color: #444; margin-bottom: 16px;">
+                Unlock Exclusive Student Discounts - Verify your Student ID
+            </div>
+            <a id="loginLink" href="#" style="color: #687AE4; text-decoration: underline; font-weight: bold; cursor: pointer;">
+                Login now
+            </a>
+        </div>
+
         <div class="zepp-subtitle">What is ZEPP?</div>
         <div class="zepp-about">
             ZEPP (Student Purchase Program) is India's most trusted shopping destination for students, parents, and
