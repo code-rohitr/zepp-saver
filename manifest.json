@@ -10,7 +10,7 @@
   ],
   "host_permissions": [
     "https://script.google.com/*",
-    "http://localhost:3000/*"
+    "https://localhost:3000/*"
   ],
   "content_scripts": [
     {
@@ -27,6 +27,14 @@
     },
     {
       "matches": [
+        "https://www.amazon.in/checkout*"
+      ],
+      "js": [
+        "amazon_payment.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.flipkart.com/viewcart*"
       ],
       "js": [
@@ -38,7 +46,14 @@
         "https://www.flipkart.com/*/p/*"
       ],
       "js": [
+        "auth.js",
         "flipkart.js"
+      ],
+      "exclude_matches": [
+        "https://www.flipkart.com/*payment*",
+        "https://www.flipkart.com/*payments*",
+        "https://www.flipkart.com/checkout*",
+        "https://www.flipkart.com/secure/payments*"
       ]
     },
     {
@@ -55,6 +70,29 @@
       ],
       "js": [
         "nykaa.js"
+      ],
+      "exclude_matches": [
+        "https://www.nykaa.com/*payment*",
+        "https://www.nykaa.com/v2/payment*",
+        "https://www.nykaa.com/v2/address*"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.nykaa.com/v2/address*",
+        "https://www.nykaa.com/v2/payment*"
+      ],
+      "js": [
+        "nykaa_payment.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://www.flipkart.com/payments?*"
+      ],
+      "js": [
+        "auth.js",
+        "flipkart_payment.js"
       ]
     },
     {

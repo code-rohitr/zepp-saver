@@ -1,0 +1,205 @@
+Test Category,Test Case ID,Test Case Description,Priority,Expected Result,Test Steps,Status,Notes
+Security Testing,SEC-001,Authentication Bypass Prevention,Critical,"OTP '123456' should fail, no hardcoded authentication","1. Enter any email address
+2. Try OTP '123456' 
+3. Verify authentication fails
+4. Check console for no hardcoded credential warnings",Pending,Must pass for Chrome Store submission
+Security Testing,SEC-002,HTTPS Communication Verification,Critical,All API calls use HTTPS protocol,"1. Open Developer Tools Network tab
+2. Perform login and price checking actions
+3. Verify all requests use https:// protocol
+4. Check manifest.json host_permissions for https only",Pending,Required for data security compliance
+Security Testing,SEC-003,XSS Prevention Testing,Critical,Malicious scripts do not execute,"1. Inject <script>alert('XSS')</script> in price fields via network interception
+2. Verify no script execution occurs
+3. Check that innerHTML is not used for dynamic content
+4. Test with malicious API responses",Pending,Critical for user safety
+Security Testing,SEC-004,LocalStorage Security Validation,Critical,No sensitive data in localStorage,"1. Open DevTools > Application > Local Storage
+2. Check for zepp_dummy_otp or zepp_temp_email entries
+3. Verify authentication data uses chrome.storage.local only
+4. Ensure no hardcoded credentials in storage",Pending,Required for data protection
+Security Testing,SEC-005,Console Log Security Check,High,No sensitive data exposed in console,"1. Open Developer Console
+2. Perform authentication and price checking
+3. Verify no user emails, API responses, or credentials logged
+4. Check for sanitized logging messages only",Pending,Important for privacy compliance
+Authentication Testing,AUTH-001,Valid Student Email Authentication,High,Student email authentication succeeds,"1. Enter valid student email (.edu domain)
+2. Request OTP
+3. Enter valid OTP from backend
+4. Verify successful authentication and UI update",Pending,Core functionality test
+Authentication Testing,AUTH-002,Invalid Email Rejection,Medium,Invalid emails are rejected,"1. Test with invalid email formats (no @, no domain)
+2. Test with non-student emails
+3. Verify appropriate error messages
+4. Ensure no OTP is sent for invalid emails",Pending,Input validation test
+Authentication Testing,AUTH-003,OTP Validation,High,Only correct OTP allows authentication,"1. Request OTP for valid email
+2. Try wrong OTP codes
+3. Verify authentication fails with clear error
+4. Use correct OTP and verify success",Pending,Security and functionality test
+Authentication Testing,AUTH-004,Session Persistence,Medium,Authentication persists across browser sessions,"1. Login successfully
+2. Close and reopen browser
+3. Visit supported e-commerce site
+4. Verify user remains authenticated",Pending,User experience test
+Authentication Testing,AUTH-005,Logout Functionality,Medium,Users can logout successfully,"1. Login to extension
+2. Click settings icon and logout
+3. Verify authentication state cleared
+4. Check that protected features are hidden",Pending,Security and UX test
+Price Comparison Testing,PRICE-001,Amazon Price Fetching,High,ZEPP prices display correctly on Amazon,"1. Visit Amazon product page with known ASIN
+2. Verify extension popup appears
+3. Check ZEPP price vs current price comparison
+4. Verify savings calculation accuracy",Pending,Core value proposition test
+Price Comparison Testing,PRICE-002,Flipkart Price Fetching,High,ZEPP prices display correctly on Flipkart,"1. Visit Flipkart product page
+2. Verify extension popup appears with price data
+3. Check savings calculation
+4. Verify Shop Now button functionality",Pending,Core functionality test
+Price Comparison Testing,PRICE-003,Nykaa Price Fetching,High,ZEPP prices display correctly on Nykaa,"1. Visit Nykaa product page
+2. Check extension popup with price comparison
+3. Verify discount calculations
+4. Test payment page integration",Pending,Core functionality test
+Price Comparison Testing,PRICE-004,No Price Available Handling,Medium,Graceful handling when ZEPP price unavailable,"1. Visit product page without ZEPP price data
+2. Verify extension behaves gracefully
+3. Check appropriate messaging to user
+4. Ensure no JavaScript errors",Pending,Error handling test
+Price Comparison Testing,PRICE-005,Price Cache Functionality,Low,Cached prices load faster on repeat visits,"1. Visit product page (first time)
+2. Note loading time
+3. Revisit same product within cache period
+4. Verify faster loading from cache",Pending,Performance optimization test
+Gift Card Testing,GC-001,Gift Card Display for Supported Sites,Medium,Gift cards show for supported domains,"1. Visit supported e-commerce sites
+2. Verify gift card offers display
+3. Check discount percentages and descriptions
+4. Test gift card CTA links",Pending,Feature completeness test
+Gift Card Testing,GC-002,Universal Gift Card System,Medium,Gift cards show on unsupported sites via gc.js,"1. Visit non-supported e-commerce site
+2. Verify gc.js popup appears if gift card data available
+3. Test gift card functionality
+4. Check domain-specific offers",Pending,Universal coverage test
+Gift Card Testing,GC-003,Authenticated vs Unauthenticated Experience,Medium,Different gift card experience based on auth status,"1. Test gift card display while logged out
+2. Login and verify enhanced gift card benefits
+3. Check for extra cashback mentions for authenticated users
+4. Verify Shop Now button visibility rules",Pending,Feature differentiation test
+API Integration Testing,API-001,Backend API Connectivity,Critical,Extension connects to backend APIs successfully,"1. Start backend server at https://localhost:3000
+2. Test OTP send and verify endpoints
+3. Test price fetching APIs
+4. Verify gift card data retrieval",Pending,Infrastructure dependency test
+API Integration Testing,API-002,API Error Handling,High,Graceful degradation when APIs are unavailable,"1. Stop backend server
+2. Test extension functionality
+3. Verify appropriate error messages
+4. Ensure extension doesn't crash",Pending,Resilience test
+API Integration Testing,API-003,API Response Validation,Medium,Extension handles malformed API responses,"1. Mock API responses with invalid JSON
+2. Test with missing required fields
+3. Verify extension handles errors gracefully
+4. Check for no JavaScript exceptions",Pending,Data validation test
+API Integration Testing,API-004,Network Timeout Handling,Medium,Extension handles slow/timeout API responses,"1. Simulate slow network conditions
+2. Test API timeouts
+3. Verify appropriate loading states
+4. Check timeout error messages",Pending,Performance under adverse conditions
+User Interface Testing,UI-001,Extension Popup Display,High,Extension popup displays correctly on all sites,"1. Visit Amazon, Flipkart, Nykaa
+2. Verify popup positioning and styling
+3. Check responsive design
+4. Test on different screen resolutions",Pending,User experience test
+User Interface Testing,UI-002,Header Icon Alignment,Medium,Header icons are horizontally aligned,"1. Open extension popup
+2. Check info, settings, and close icons alignment
+3. Verify consistent spacing and positioning
+4. Test across different browsers",Pending,UI polish test
+User Interface Testing,UI-003,Authentication UI Flow,High,Login flow is intuitive and user-friendly,"1. Test email input and validation
+2. Verify OTP step transition
+3. Check success/error message display
+4. Test form accessibility",Pending,User experience test
+User Interface Testing,UI-004,Settings Modal Functionality,Medium,Settings modal works correctly,"1. Click settings icon when authenticated
+2. Verify user email display
+3. Test logout functionality
+4. Check modal close behavior",Pending,Feature completeness test
+User Interface Testing,UI-005,Responsive Design,Medium,Extension works on different screen sizes,"1. Test extension on various screen resolutions
+2. Check mobile browser compatibility
+3. Verify popup scaling and positioning
+4. Test with browser zoom levels",Pending,Cross-platform compatibility
+Performance Testing,PERF-001,Extension Load Time,Medium,Extension loads quickly without blocking page load,"1. Visit e-commerce sites
+2. Measure extension initialization time
+3. Verify page load not significantly impacted
+4. Check for performance warnings in console",Pending,Performance optimization
+Performance Testing,PERF-002,Memory Usage,Low,Extension uses reasonable memory,"1. Monitor extension memory usage in Chrome Task Manager
+2. Test with multiple tabs open
+3. Verify no significant memory leaks
+4. Check garbage collection behavior",Pending,Resource efficiency test
+Performance Testing,PERF-003,API Response Time,Medium,API calls complete within reasonable time,"1. Monitor network requests in DevTools
+2. Check API response times
+3. Verify cache effectiveness
+4. Test under slow network conditions",Pending,User experience under load
+Data Privacy Testing,PRIV-001,Data Collection Compliance,Critical,Extension only collects necessary data,"1. Review all data collection points
+2. Verify minimal data collection principle
+3. Check data retention policies
+4. Ensure user consent mechanisms",Pending,Legal compliance requirement
+Data Privacy Testing,PRIV-002,Data Transmission Security,Critical,All user data transmitted securely,"1. Monitor network traffic during usage
+2. Verify HTTPS encryption for all requests
+3. Check for data leaks in logs
+4. Validate secure storage practices",Pending,Privacy compliance test
+Data Privacy Testing,PRIV-003,User Data Deletion,Medium,Users can delete their data,"1. Test logout functionality
+2. Verify data clearing on logout
+3. Check local storage cleanup
+4. Ensure complete data removal",Pending,GDPR compliance test
+Cross-Browser Testing,BROWSER-001,Chrome Compatibility,Critical,Extension works perfectly in Chrome,"1. Test all features in latest Chrome version
+2. Test in Chrome Beta/Canary
+3. Verify manifest V3 compliance
+4. Check Chrome-specific APIs functionality",Pending,Primary target browser test
+Cross-Browser Testing,BROWSER-002,Edge Compatibility,High,Extension works in Microsoft Edge,"1. Install extension in Edge browser
+2. Test all core functionalities
+3. Verify extension popup behavior
+4. Check for browser-specific issues",Pending,Secondary browser support
+Cross-Browser Testing,BROWSER-003,Firefox Compatibility,Medium,Extension works in Firefox (if applicable),"1. Test extension in Firefox
+2. Verify WebExtensions API compatibility
+3. Check for Firefox-specific issues
+4. Test manifest compatibility",Pending,Additional browser support
+Error Handling Testing,ERROR-001,Network Connectivity Issues,High,Extension handles offline scenarios gracefully,"1. Disconnect internet connection
+2. Test extension behavior
+3. Reconnect and verify recovery
+4. Check error messaging to users",Pending,Resilience test
+Error Handling Testing,ERROR-002,Invalid Page Content,Medium,Extension handles unexpected page structures,"1. Visit pages with unusual DOM structures
+2. Test on pages under construction
+3. Verify no JavaScript errors
+4. Check graceful degradation",Pending,Robustness test
+Error Handling Testing,ERROR-003,Extension Update Handling,Medium,Extension updates don't break user sessions,"1. Simulate extension update
+2. Verify user authentication persists
+3. Check data migration if needed
+4. Test feature continuity",Pending,Update process test
+Chrome Web Store Compliance,STORE-001,Manifest Validation,Critical,Manifest.json meets Chrome Web Store requirements,"1. Validate manifest.json syntax
+2. Check permissions are minimal and justified
+3. Verify description and metadata
+4. Ensure version numbering follows semver",Pending,Store submission requirement
+Chrome Web Store Compliance,STORE-002,Content Policy Compliance,Critical,Extension complies with Chrome Web Store policies,"1. Review content for policy violations
+2. Check for prohibited functionality
+3. Verify user data handling compliance
+4. Ensure no malicious behavior",Pending,Legal requirement for store
+Chrome Web Store Compliance,STORE-003,Privacy Policy Requirements,High,Privacy policy covers all data handling,"1. Create/update privacy policy
+2. Ensure coverage of all data collection
+3. Verify legal compliance
+4. Link privacy policy in store listing",Pending,Store requirement
+Chrome Web Store Compliance,STORE-004,Icon and Screenshot Quality,Medium,Store assets meet quality requirements,"1. Verify extension icons at all required sizes
+2. Prepare high-quality screenshots
+3. Test icons across different backgrounds
+4. Ensure promotional images comply with guidelines",Pending,Store presentation quality
+Final Integration Testing,FINAL-001,End-to-End User Journey,Critical,Complete user flow works seamlessly,"1. Fresh browser with extension installed
+2. Complete full user journey: install → authenticate → use price comparison → logout
+3. Test across multiple e-commerce sites
+4. Verify all features work together",Pending,Complete system test
+Final Integration Testing,FINAL-002,Multi-Tab Functionality,High,Extension works correctly across multiple tabs,"1. Open multiple e-commerce sites in different tabs
+2. Test authentication state sharing
+3. Verify popup behavior in each tab
+4. Check for conflicts between tabs",Pending,Real usage scenario test
+Final Integration Testing,FINAL-003,Production Environment Testing,Critical,Extension works with production backend,"1. Configure extension for production APIs
+2. Test with production authentication
+3. Verify production data accuracy
+4. Check production performance",Pending,Pre-deployment validation
+Documentation Testing,DOC-001,Installation Instructions,Medium,Users can install and setup extension easily,"1. Follow installation documentation step-by-step
+2. Verify all prerequisites are documented
+3. Test setup process with fresh environment
+4. Check troubleshooting guide completeness",Pending,User onboarding test
+Documentation Testing,DOC-002,User Guide Accuracy,Medium,User documentation matches actual functionality,"1. Follow user guide procedures
+2. Verify all features are documented
+3. Check screenshots are up-to-date
+4. Validate troubleshooting information",Pending,Documentation quality test
+Accessibility Testing,ACCESS-001,Keyboard Navigation,Medium,Extension is accessible via keyboard,"1. Test all functionality using only keyboard
+2. Verify tab order is logical
+3. Check focus indicators are visible
+4. Test screen reader compatibility",Pending,Accessibility compliance
+Accessibility Testing,ACCESS-002,Color Contrast,Low,Extension meets WCAG color contrast requirements,"1. Check color contrast ratios
+2. Test with colorblind simulation
+3. Verify text readability
+4. Check UI element visibility",Pending,Accessibility standard compliance
+Localization Testing,LOCAL-001,Text Display,Low,All text displays correctly in different languages,"1. Test extension with different browser languages
+2. Verify text encoding
+3. Check for text overflow issues
+4. Test right-to-left languages if supported",Pending,International user support

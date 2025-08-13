@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEPP Saver - Chrome Web Store Description</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #000;
+        }
+        h1, h2, h3, h4 {
+            color: #000;
+        }
+        h1 {
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        strong {
+            font-weight: bold;
+        }
+        hr {
+            border: 1px solid #000;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>ZEPP Saver - Smart Price Comparison for Students</h1>
+    
+    <p><strong>Save money while shopping online! Compare prices across Amazon, Flipkart, and Nykaa with exclusive student discounts from ZEPP.</strong></p>
+
+    <h2>What is ZEPP Saver?</h2>
+    <p>ZEPP Saver is your ultimate shopping companion that automatically compares prices between major e-commerce platforms and ZEPP's student discount program. Get the best deals on products while enjoying exclusive student benefits!</p>
+
+    <h3>Key Features</h3>
+    
+    <p><strong>Automatic Price Comparison</strong></p>
+    <ul>
+        <li>Real-time price comparison between Amazon, Flipkart, Nykaa, and ZEPP</li>
+        <li>Instant savings calculation displayed in Indian currency format (₹24,00,000)</li>
+        <li>Smart price tracking across different product categories</li>
+    </ul>
+
+    <p><strong>Student Authentication</strong></p>
+    <ul>
+        <li>Secure student email verification with OTP</li>
+        <li>Access to exclusive ZEPP student discounts</li>
+        <li>One-time login with persistent sessions</li>
+    </ul>
+
+    <p><strong>Smart Gift Card Recommendations</strong></p>
+    <ul>
+        <li>Personalized gift card offers based on your shopping behavior</li>
+        <li>Platform-specific discount opportunities</li>
+        <li>Exclusive deals for authenticated students</li>
+    </ul>
+
+    <p><strong>Cart-Level Analysis</strong></p>
+    <ul>
+        <li>Bulk price comparison for your entire shopping cart</li>
+        <li>Total savings calculation across multiple items</li>
+        <li>Optimized shopping recommendations</li>
+    </ul>
+
+    <p><strong>Intelligent UI</strong></p>
+    <ul>
+        <li>Clean, non-intrusive popups that don't disrupt your shopping</li>
+        <li>Skeleton loading for smooth user experience</li>
+        <li>Responsive design that works on all screen sizes</li>
+    </ul>
+
+    <h2>How It Works</h2>
+    <ol>
+        <li><strong>Browse Normally</strong>: Shop on Amazon, Flipkart, or Nykaa as usual</li>
+        <li><strong>Automatic Detection</strong>: Extension detects products and extracts pricing</li>
+        <li><strong>Student Login</strong>: Verify your student status with academic email + OTP</li>
+        <li><strong>Price Comparison</strong>: See real-time price differences and potential savings</li>
+        <li><strong>Smart Shopping</strong>: Choose the best deal or access exclusive student discounts</li>
+    </ol>
+
+    <h2>Supported Platforms</h2>
+    
+    <h3>Primary E-commerce Sites:</h3>
+    <ul>
+        <li><strong>Amazon India</strong> (amazon.in) - ASIN-based product matching</li>
+        <li><strong>Flipkart</strong> (flipkart.com) - FSN-based product matching</li>
+        <li><strong>Nykaa</strong> (nykaa.com) - SKU-based product matching</li>
+    </ul>
+
+    <h3>Additional Gift Card Support:</h3>
+    <p>Zomato, Swiggy, BigBasket, Myntra, Domino's, Uber, Prime Video, Jockey, and more!</p>
+
+    <h2>Privacy & Security</h2>
+    
+    <p><strong>We respect your privacy and follow strict data protection practices:</strong></p>
+
+    <h3>Data Collection</h3>
+    <ul>
+        <li><strong>Authentication Data</strong>: Only your student email and login status</li>
+        <li><strong>Product Information</strong>: Product IDs and prices for comparison (not stored permanently)</li>
+        <li><strong>Usage Analytics</strong>: Anonymous usage patterns to improve service quality</li>
+    </ul>
+
+    <h3>Data Storage</h3>
+    <ul>
+        <li><strong>Local Storage Only</strong>: Authentication status stored locally in your browser</li>
+        <li><strong>No Personal Data</strong>: We don't collect personal information beyond email verification</li>
+        <li><strong>Secure Sessions</strong>: All authentication uses industry-standard security practices</li>
+    </ul>
+
+    <h3>Data Sharing</h3>
+    <ul>
+        <li><strong>No Third-Party Sharing</strong>: Your data is never sold or shared with advertisers</li>
+        <li><strong>API Communication</strong>: Secure communication with ZEPP servers only for price comparison</li>
+        <li><strong>Temporary Processing</strong>: Product data processed in real-time, not stored</li>
+    </ul>
+
+    <h2>Permissions Explained</h2>
+    
+    <p><strong>Why does ZEPP Saver need these permissions?</strong></p>
+
+    <h3>Active Tab Access</h3>
+    <ul>
+        <li><strong>Purpose</strong>: Read product information and prices from e-commerce sites</li>
+        <li><strong>Usage</strong>: Extract product IDs (ASIN, FSN, SKU) and current prices</li>
+        <li><strong>Limitation</strong>: Only accesses active tab when you're shopping</li>
+    </ul>
+
+    <h3>Storage Permission</h3>
+    <ul>
+        <li><strong>Purpose</strong>: Remember your student authentication status</li>
+        <li><strong>Usage</strong>: Store login state to avoid repeated authentication</li>
+        <li><strong>Data</strong>: Only email and authentication status (no passwords stored)</li>
+    </ul>
+
+    <h3>Host Permissions</h3>
+    <ul>
+        <li><strong>script.google.com</strong>: For price comparison API calls</li>
+        <li><strong>localhost:3000</strong>: Development and testing API endpoints</li>
+        <li><strong>E-commerce domains</strong>: Amazon, Flipkart, Nykaa for price extraction</li>
+    </ul>
+
+    <h3>Scripting Permission</h3>
+    <ul>
+        <li><strong>Purpose</strong>: Inject price comparison interface into shopping pages</li>
+        <li><strong>Usage</strong>: Display price comparisons and savings information</li>
+        <li><strong>Safety</strong>: Runs in isolated environment, cannot access other tabs</li>
+    </ul>
+
+    <h2>System Requirements</h2>
+
+    <h3>Browser Compatibility</h3>
+    <ul>
+        <li><strong>Chrome</strong>: Version 88 or higher</li>
+        <li><strong>Chromium-based browsers</strong>: Edge, Brave, Opera (latest versions)</li>
+        <li><strong>Manifest V3</strong>: Uses latest Chrome Extension standards</li>
+    </ul>
+
+    <h3>Network Requirements</h3>
+    <ul>
+        <li><strong>Internet Connection</strong>: Required for real-time price comparison</li>
+        <li><strong>API Access</strong>: Communication with ZEPP price comparison servers</li>
+        <li><strong>HTTPS Support</strong>: Secure connections for all data transmission</li>
+    </ul>
+
+    <h3>Student Requirements</h3>
+    <ul>
+        <li><strong>Academic Email</strong>: Valid student email address for verification</li>
+        <li><strong>OTP Access</strong>: Ability to receive OTP codes via email</li>
+        <li><strong>Valid Student Status</strong>: Must be enrolled in eligible educational institution</li>
+    </ul>
+
+    <h2>Benefits for Students</h2>
+
+    <h3>Save Money</h3>
+    <ul>
+        <li>Access exclusive student discounts up to 30% off</li>
+        <li>Compare prices across multiple platforms instantly</li>
+        <li>Never miss the best deals again</li>
+    </ul>
+
+    <h3>Save Time</h3>
+    <ul>
+        <li>No more manual price comparison across websites</li>
+        <li>Instant notifications about better prices</li>
+        <li>One-click access to the best deals</li>
+    </ul>
+
+    <h3>Smart Shopping</h3>
+    <ul>
+        <li>Personalized recommendations based on your preferences</li>
+        <li>Gift card offers for additional savings</li>
+        <li>Cart-level optimization for bulk purchases</li>
+    </ul>
+
+    <h2>Installation & Setup</h2>
+    <ol>
+        <li><strong>Install Extension</strong>: Add ZEPP Saver from Chrome Web Store</li>
+        <li><strong>Visit Supported Sites</strong>: Go to Amazon, Flipkart, or Nykaa</li>
+        <li><strong>Student Login</strong>: Click login and verify with your student email</li>
+        <li><strong>Start Saving</strong>: Automatic price comparison on all product pages!</li>
+    </ol>
+
+    <h2>Support & Feedback</h2>
+    
+    <h3>Need Help?</h3>
+    <ul>
+        <li><strong>Issues</strong>: Report bugs via Chrome Web Store reviews</li>
+        <li><strong>Feature Requests</strong>: Contact our development team</li>
+        <li><strong>Student Verification Problems</strong>: Check your email spam folder for OTP</li>
+    </ul>
+
+    <h3>Stay Updated:</h3>
+    <ul>
+        <li>Regular updates with new features and platform support</li>
+        <li>Improved price comparison algorithms</li>
+        <li>Enhanced user experience based on feedback</li>
+    </ul>
+
+    <h2>Important Notes</h2>
+
+    <h3>Fair Use Policy</h3>
+    <ul>
+        <li>Extension designed for personal use only</li>
+        <li>Respect e-commerce platform terms of service</li>
+        <li>No automated or bulk data extraction</li>
+    </ul>
+
+    <h3>Accuracy Disclaimer</h3>
+    <ul>
+        <li>Prices are fetched in real-time but may change rapidly</li>
+        <li>Always verify final prices on the respective platforms</li>
+        <li>ZEPP Saver is not responsible for pricing errors</li>
+    </ul>
+
+    <h3>Student Verification</h3>
+    <ul>
+        <li>Valid academic email required for student features</li>
+        <li>Verification may take up to 24 hours</li>
+        <li>Some institutions may not be supported initially</li>
+    </ul>
+
+    <h2>Coming Soon</h2>
+    <ul>
+        <li><strong>Mobile App Integration</strong>: Sync with mobile shopping apps</li>
+        <li><strong>Price History</strong>: Track price trends over time</li>
+        <li><strong>Wishlist Monitoring</strong>: Get notified when prices drop</li>
+        <li><strong>More Platforms</strong>: Expanding to additional e-commerce sites</li>
+        <li><strong>Advanced Analytics</strong>: Detailed savings reports</li>
+    </ul>
+
+    <div class="footer">
+        <hr>
+        <h3>Download ZEPP Saver today and start saving money on every purchase!</h3>
+        
+        <p><em>This extension is developed for educational purposes and to help students access better prices and discounts. By installing this extension, you agree to our terms of service and privacy policy.</em></p>
+        
+        <p><strong>Version</strong>: 1.0</p>
+        <p><strong>Developer</strong>: ZEPP Team</p>
+        <p><strong>Contact</strong>: [Your contact information]</p>
+        <p><strong>Website</strong>: [Your website URL]</p>
+        
+        <p><strong>ZEPP Saver - Making student shopping smarter and more affordable!</strong></p>
+    </div>
+</body>
+</html>

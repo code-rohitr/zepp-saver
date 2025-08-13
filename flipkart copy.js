@@ -142,7 +142,7 @@ function injectStylishPopup(sheetPrice, productURL, flipkartPrice) {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #000000;
+    background: #4755A5;
     display: flex;
     justify-content: center;
     align-items: center;

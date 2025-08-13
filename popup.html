@@ -20,9 +20,37 @@
             color: white;
             padding: 10px 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            
+        }
+        
+        .zepp-header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        
+        .zepp-nav-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: background 0.2s ease;
+        }
+        
+        .zepp-nav-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .zepp-nav-button.active {
+            background: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
         }
 
         .zepp-header-top {
@@ -119,13 +147,160 @@
             line-height: 150%;
             margin-top: 10px;
         }
+        
+        .zepp-info-section {
+            display: none;
+        }
+        
+        .zepp-info-feature {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #687AE4;
+        }
+        
+        .zepp-info-feature h4 {
+            margin: 0 0 8px 0;
+            color: #242424;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .zepp-info-feature p {
+            margin: 0;
+            color: #555;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .zepp-tips-box {
+            background: #fff8e1;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #ffa726;
+            margin-bottom: 16px;
+        }
+        
+        .zepp-tips-box h4 {
+            margin: 0 0 8px 0;
+            color: #242424;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .zepp-tips-box ul {
+            margin: 0;
+            padding-left: 16px;
+            color: #555;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .zepp-how-to {
+            background: #f0fff4;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin-bottom: 16px;
+        }
+        
+        .zepp-how-to h4 {
+            margin: 0 0 8px 0;
+            color: #242424;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .zepp-how-to ol {
+            margin: 0;
+            padding-left: 16px;
+            color: #555;
+            font-size: 12px;
+            line-height: 1.4;
+        }
     </style>
 
     <div class="zepp-header">
-        <div class="zepp-header-title">About <strong>ZEPP</strong></div>
+        <div class="zepp-header-nav">
+            <button class="zepp-nav-button active" id="aboutTab">About</button>
+            <div class="zepp-header-title"><strong>ZEPP</strong> Saver</div>
+            <button class="zepp-nav-button" id="infoTab">Guide</button>
+        </div>
     </div>
 
     <div class="zepp-section">
+        <!-- Gift Card Section -->
+        <div id="giftCardSection" style="display: none;">
+            <div id="giftCardContainer" style="
+                background: #ffffff;
+                border-radius: 12px;
+                margin-bottom: 16px;
+                overflow: hidden;
+                border: 1px solid #e2e8f0;
+                position: relative;
+            ">
+                <div id="giftCardRibbon" style="
+                    position: absolute;
+                    top: -5px;
+                    right: -5px;
+                    background: #ff4a5d;
+                    color: white;
+                    padding: 4px 20px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    transform: rotate(12deg);
+                    border-radius: 4px;
+                    z-index: 2;
+                "></div>
+                <div style="padding: 16px; text-align: center;">
+                    <img id="giftCardImage" style="
+                        width: 50px; 
+                        height: 50px; 
+                        border-radius: 50%; 
+                        margin-bottom: 12px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    " />
+                    <h3 id="giftCardTitle" style="
+                        font-size: 14px; 
+                        font-weight: bold; 
+                        color: #1a202c;
+                        margin: 0 0 8px 0;
+                    "></h3>
+                    <p id="giftCardDesc" style="
+                        color: #666; 
+                        margin: 0 0 12px 0; 
+                        font-size: 12px;
+                        line-height: 1.4;
+                    "></p>
+                    <a id="giftCardCTA" href="#" target="_blank" style="
+                        display: inline-block;
+                        background: #242424;
+                        color: white;
+                        text-decoration: none;
+                        padding: 8px 16px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        transition: background 0.2s ease;
+                    "></a>
+                </div>
+                <button id="closeGiftCard" style="
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    background: #f0f0f0;
+                    border: none;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    font-size: 14px;
+                    cursor: pointer;
+                    color: #555;
+                ">&times;</button>
+            </div>
+        </div>
+
         <!-- User Info Section (shows when authenticated) -->
         <div id="userInfo" style="display: none;"></div>
 
@@ -150,32 +325,215 @@
             <div style="font-size: 16px; color: #444; margin-bottom: 16px;">
                 Unlock Exclusive Student Discounts - Verify your Student ID
             </div>
-            <a id="loginLink" href="#" style="color: #687AE4; text-decoration: underline; font-weight: bold; cursor: pointer;">
-                Login now
+            <button id="loginBtn" style="
+                background: #687AE4;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-weight: bold;
+                cursor: pointer;
+                font-size: 14px;
+            ">
+                Login with Student Email
+            </button>
+        </div>
+
+        <!-- Login Form (shows during login process) -->
+        <div id="loginForm" style="display: none; padding: 20px 0;">
+            <div id="emailStep">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px;">Student Email</label>
+                    <input 
+                        type="email" 
+                        id="studentEmail" 
+                        placeholder="your.name@university.edu"
+                        style="
+                            width: 100%;
+                            padding: 10px;
+                            border: 2px solid #e1e5e9;
+                            border-radius: 6px;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                        "
+                    />
+                </div>
+                <button 
+                    id="sendOtpBtn"
+                    style="
+                        width: 100%;
+                        padding: 10px;
+                        background: #687AE4;
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 14px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-bottom: 10px;
+                    "
+                >
+                    Send OTP
+                </button>
+                <button 
+                    id="cancelLoginBtn"
+                    style="
+                        width: 100%;
+                        padding: 8px;
+                        background: none;
+                        color: #666;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        cursor: pointer;
+                    "
+                >
+                    Cancel
+                </button>
+            </div>
+            
+            <div id="otpStep" style="display: none;">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px;">Enter OTP</label>
+                    <input 
+                        type="text" 
+                        id="otpCode" 
+                        placeholder="123456"
+                        maxlength="6"
+                        style="
+                            width: 100%;
+                            padding: 10px;
+                            border: 2px solid #e1e5e9;
+                            border-radius: 6px;
+                            font-size: 14px;
+                            text-align: center;
+                            box-sizing: border-box;
+                        "
+                    />
+                </div>
+                <button 
+                    id="verifyOtpBtn"
+                    style="
+                        width: 100%;
+                        padding: 10px;
+                        background: #28a745;
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 14px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-bottom: 10px;
+                    "
+                >
+                    Verify & Login
+                </button>
+                <button 
+                    id="backToEmailBtn"
+                    style="
+                        width: 100%;
+                        padding: 8px;
+                        background: none;
+                        color: #687AE4;
+                        border: none;
+                        font-size: 12px;
+                        cursor: pointer;
+                        text-decoration: underline;
+                    "
+                >
+                    ← Back to email
+                </button>
+            </div>
+            
+            <div id="loginMessage" style="
+                margin-top: 16px;
+                padding: 10px;
+                border-radius: 6px;
+                font-size: 12px;
+                text-align: center;
+                display: none;
+            "></div>
+        </div>
+
+        <!-- Info Section (shows when Guide tab is active) -->
+        <div id="infoSection" class="zepp-info-section">
+            <div class="zepp-subtitle">🎯 What does ZEPP Saver do?</div>
+            <p style="color: #555; margin-bottom: 20px; font-size: 12px; line-height: 1.5;">ZEPP Saver automatically compares prices between major e-commerce platforms and ZEPP's student discount platform, helping you save money on every purchase.</p>
+            
+            <div class="zepp-subtitle">🚀 Key Features</div>
+            <div class="zepp-info-feature">
+                <h4>💰 Price Comparison</h4>
+                <p>Compare Amazon, Flipkart, and Nykaa prices with ZEPP's student discounts instantly.</p>
+            </div>
+            <div class="zepp-info-feature">
+                <h4>🎓 Student Authentication</h4>
+                <p>Secure login with your student email to access exclusive discounts.</p>
+            </div>
+            <div class="zepp-info-feature">
+                <h4>🎁 Gift Card Offers</h4>
+                <p>Get additional cashback with platform-specific gift cards.</p>
+            </div>
+            <div class="zepp-info-feature">
+                <h4>⚡ Smart Notifications</h4>
+                <p>Automatic popups when better prices are available.</p>
+            </div>
+            
+            <div class="zepp-subtitle">📖 How to Use</div>
+            <div class="zepp-how-to">
+                <h4>Step-by-Step Guide</h4>
+                <ol>
+                    <li><strong>Browse</strong> any product on Amazon, Flipkart, or Nykaa</li>
+                    <li><strong>Look for</strong> the ZEPP Saver popup in the bottom-right corner</li>
+                    <li><strong>Login</strong> with your student email for exclusive discounts</li>
+                    <li><strong>Compare</strong> prices and see potential savings</li>
+                    <li><strong>Click "Save Now"</strong> to shop at the best price</li>
+                </ol>
+            </div>
+            
+            <div class="zepp-subtitle">💡 Pro Tips</div>
+            <div class="zepp-tips-box">
+                <h4>Maximize Your Savings</h4>
+                <ul>
+                    <li><strong>Stay logged in:</strong> Keep your student login active for instant discounts</li>
+                    <li><strong>Gift cards stack:</strong> Use gift cards on top of existing coupons</li>
+                    <li><strong>Payment pages:</strong> Check Nykaa payment pages for additional savings</li>
+                    <li><strong>Multiple platforms:</strong> Compare across all supported sites</li>
+                    <li><strong>Student bonus:</strong> Get 1% extra cashback when logged in</li>
+                </ul>
+            </div>
+            
+            <div class="zepp-subtitle">🛡️ Privacy & Security</div>
+            <p style="color: #555; margin-bottom: 20px; font-size: 12px; line-height: 1.5;">ZEPP Saver only stores your authentication status locally and never shares your personal information. All price comparisons happen securely through ZEPP's servers.</p>
+        </div>
+
+        <!-- About Section (default view) -->
+        <div id="aboutSection">
+
+            <div class="zepp-subtitle">What is ZEPP?</div>
+            <div class="zepp-about">
+                ZEPP (Student Purchase Program) is India's most trusted shopping destination for students, parents, and
+                educators.
+                We partner directly with top brands to bring you authentic, brand-new electronics and lifestyle products at
+                the best possible prices.
+            </div>
+
+            <div class="zepp-subtitle">Why Shop on ZEPP?</div>
+            <ul class="zepp-about">
+                <li>Exclusive student pricing and offers</li>
+                <li>Direct brand delivery, no third-party sellers</li>
+                <li>Genuine products with brand warranties</li>
+                <li>Zero hidden costs. Transparent pricing.</li>
+                <li>Free shipping and guaranteed cashback</li>
+            </ul>
+
+            <a id="ctaBtn" class="zepp-cta" href="https://zepp.studentpurchaseprogram.com/" target="_blank" style="display: none;">
+                <img id="zeppIcon" style="height: 24px;" />
+                Visit ZEPP Now
             </a>
         </div>
-
-        <div class="zepp-subtitle">What is ZEPP?</div>
-        <div class="zepp-about">
-            ZEPP (Student Purchase Program) is India's most trusted shopping destination for students, parents, and
-            educators.
-            We partner directly with top brands to bring you authentic, brand-new electronics and lifestyle products at
-            the best possible prices.
-        </div>
-
-        <div class="zepp-subtitle">Why Shop on ZEPP?</div>
-        <ul class="zepp-about">
-            <li>Exclusive student pricing and offers</li>
-            <li>Direct brand delivery, no third-party sellers</li>
-            <li>Genuine products with brand warranties</li>
-            <li>Zero hidden costs. Transparent pricing.</li>
-            <li>Free shipping and guaranteed cashback</li>
-        </ul>
-
-        <a id="ctaBtn" class="zepp-cta" href="https://zepp.studentpurchaseprogram.com/" target="_blank">
-            <img id="zeppIcon" style="height: 24px;" />
-            Visit ZEPP Now
-        </a>
     </div>
 </div>
+
+<script src="auth.js"></script>
+<script src="popup.js"></script>
 
