@@ -467,8 +467,8 @@ function showSettingsMessage(message, type) {
 
 // Info functionality moved to popup.html
 
-// Shop Now redirect cache with 30-minute expiry
-const SHOP_NOW_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+// Shop Now redirect cache with 2-hour expiry
+const SHOP_NOW_CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 const SHOP_NOW_CACHE_PREFIX = 'zepp_shop_redirect_';
 
 function getCachedShopRedirect(urlKey, userEmail) {
@@ -771,8 +771,8 @@ async function injectAutoPopup(asin, price) {
             
             <!-- Discount Highlight Text -->
             <div style="
-              background: rgba(71, 85, 165, 0.1);
-              color: black;
+              background: rgba(0, 0, 0, 1);
+              color: white;
               padding: 8px 16px;
               font-size: 14px;
               font-weight: 700;
@@ -799,7 +799,7 @@ async function injectAutoPopup(asin, price) {
               padding: 10px 12px;
               border-radius: 6px;
             ">
-              <p style="
+              <p id="giftCardDisclaimer" style="
                 font-size: 12px;
                 color: #6c6c6cff;
                 margin: 0;
@@ -813,7 +813,7 @@ async function injectAutoPopup(asin, price) {
             
             <a id="giftCardCTA" href="#" target="_blank" style="
               display: inline-block;
-              background: linear-gradient(135deg, #687AE4 0%, #5a6fd8 100%);
+              background: #000000;
               color: white;
               text-decoration: none;
               padding: 12px 24px;
@@ -855,7 +855,7 @@ async function injectAutoPopup(asin, price) {
           background: #f0f2fd;
         ">
           <div style="font-size: 14px; line-height: 1.4;">
-            Unlock Exclusive Employee Discounts with your organization email<br>
+            Unlock Exclusive Student Discounts with your Institute email<br>
           </div>
           <button id="startLoginBtn" style="
             color: #667eea;
@@ -868,7 +868,7 @@ async function injectAutoPopup(asin, price) {
             font-size: 14px;
             width: 100%;
             transition: all 0.3s ease;
-          " onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.background='rgba(255,255,255,0.95)'; this.style.transform='translateY(0)'">
+          " onmouseover="this.style.transform='translateY(-1px)';  this.style.transform='translateY(0)'">
             Login
           </button>
         </div>
@@ -877,7 +877,25 @@ async function injectAutoPopup(asin, price) {
         <div id="loginForm" style="display: none; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
           <div id="emailStep">
             <div style="margin-bottom: 16px;">
-              <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px;">Student Email</label>
+              <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                <button 
+                  id="cancelLoginBtn"
+                  style="
+                    background: none;
+                    border: none;
+                    color: #666;
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 4px;
+                    margin-right: 8px;
+                    transition: color 0.3s ease;
+                  "
+                  title="Go back"
+                >
+                  ←
+                </button>
+                <label style="color: #333; font-weight: 500; font-size: 14px; margin: 0; padding: 0; display: flex; align-items: center;">Student Email</label>
+              </div>
               <input 
                 type="email" 
                 id="studentEmail" 
@@ -905,27 +923,10 @@ async function injectAutoPopup(asin, price) {
                 font-size: 14px;
                 font-weight: 600;
                 cursor: pointer;
-                margin-bottom: 12px;
                 transition: background 0.3s ease;
               "
             >
-              Send OTP
-            </button>
-            <button 
-              id="cancelLoginBtn"
-              style="
-                width: 100%;
-                padding: 10px;
-                background: none;
-                color: #666;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                font-size: 12px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-              "
-            >
-              Cancel
+              Send
             </button>
           </div>
           
@@ -1405,23 +1406,31 @@ function hideGiftCardSkeleton() {
   }
 }
 
-// Gift card cache with 5-minute expiry using localStorage
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Gift card cache with 15-minute expiry using localStorage
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 const CACHE_PREFIX = 'zepp_gc_';
 
-function getCachedGiftCard(domain) {
+function getCachedGiftCard(domain, ignoreExpiration = false) {
   try {
     const cacheKey = CACHE_PREFIX + domain;
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
       const parsedCache = JSON.parse(cached);
-      if (parsedCache && (Date.now() - parsedCache.timestamp) < CACHE_DURATION) {
-        console.log('✅ Using cached gift card data from localStorage for:', domain);
-        return parsedCache.data;
-      } else {
-        // Remove expired cache
-        localStorage.removeItem(cacheKey);
-        console.log('🗑️ Removed expired cache for:', domain);
+      if (parsedCache) {
+        const isExpired = (Date.now() - parsedCache.timestamp) >= CACHE_DURATION;
+        
+        if (!isExpired || ignoreExpiration) {
+          if (ignoreExpiration && isExpired) {
+            console.log('🔄 Using expired cached gift card data as fallback for:', domain);
+          } else {
+            console.log('✅ Using cached gift card data from localStorage for:', domain);
+          }
+          return parsedCache.data;
+        } else {
+          // Remove expired cache only if we're not ignoring expiration
+          localStorage.removeItem(cacheKey);
+          console.log('🗑️ Removed expired cache for:', domain);
+        }
       }
     }
   } catch (error) {
@@ -1456,7 +1465,7 @@ async function loadGiftCardForPopup(isAuthenticated = false) {
       return;
     }
 
-    // Try API first, then fallback to mock data
+    // Try API first, then fallback to any cached data (even expired)
     try {
       const response = await fetch(`http://localhost:3000/giftcard?domain=${encodeURIComponent(domain)}`);
       if (response.ok) {
@@ -1469,31 +1478,15 @@ async function loadGiftCardForPopup(isAuthenticated = false) {
         }
       }
     } catch (error) {
-      console.log('API fetch failed, using fallback data:', error.message);
+      console.log('API fetch failed, checking for any cached data:', error.message);
     }
 
-    // Fallback to mock data
+    // Fallback to any cached data (even if expired) when API fails
     if (!cardData) {
-      const mockGiftCards = {
-        'amazon.in': {
-          discount: 15,
-          img: 'https://logo.clearbit.com/amazon.in',
-          title: 'Amazon Gift Card',
-          desc: 'Get 15% off on your next purchase with Amazon gift cards',
-          cta: 'Claim Offer',
-          link: 'https://zepp.studentpurchaseprogram.com/amazon-offer'
-        },
-        'flipkart.com': {
-          discount: 20,
-          img: 'https://logo.clearbit.com/flipkart.com',
-          title: 'Flipkart SuperCoin',
-          desc: 'Earn 20% extra SuperCoins on all purchases',
-          cta: 'Get SuperCoins',
-          link: 'https://zepp.studentpurchaseprogram.com/flipkart-offer'
-        }
-      };
-
-      cardData = mockGiftCards[domain];
+      cardData = getCachedGiftCard(domain, true); // true = ignore expiration
+      if (cardData) {
+        console.log('🔄 Using expired cached data as fallback for:', domain);
+      }
     }
 
     if (cardData) {
@@ -1517,6 +1510,7 @@ function displayGiftCardInPopup(cardData, isAuthenticated = false) {
   const giftCardCTA = document.getElementById('giftCardCTA');
   const giftCardDiscount = document.getElementById('giftCardDiscount');
   const giftCardDiscountText = document.getElementById('giftCardDiscountText');
+  const giftCardDisclaimer = document.getElementById('giftCardDisclaimer');
   const closeGiftCard = document.getElementById('closeGiftCard');
 
   if (!giftCardSection) {
@@ -1552,6 +1546,12 @@ function displayGiftCardInPopup(cardData, isAuthenticated = false) {
   if (giftCardDiscountText && cardData.discount) {
     giftCardDiscountText.textContent = `Pay ${cardData.discount}% less with`;
     console.log('✨ Discount text updated:', `Save ${cardData.discount}% now with`);
+  }
+  
+  // Update disclaimer text with dynamic discount percentage
+  if (giftCardDisclaimer && cardData.discount) {
+    giftCardDisclaimer.textContent = `💡 Buy Amazon Pay Gift Cards at ${cardData.discount}% off and use them at full value.`;
+    console.log('✨ Disclaimer text updated with discount:', `${cardData.discount}%`);
   }
 
   // Hide skeleton first

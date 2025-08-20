@@ -68,20 +68,6 @@ class AuthManager {
       return { success: false, error: 'Please use a valid student email address' };
     }
     
-    // Hardcoded fallback for testing
-    if (otp === '123456') {
-      this.isAuthenticated = true;
-      this.userEmail = email;
-      
-      await this.setStoredAuthData({
-        isAuthenticated: true,
-        email: email,
-        timestamp: Date.now()
-      });
-
-      return { success: true, message: 'OTP verified successfully' };
-    }
-    
     try {
       const response = await fetch(`${API_BASE_URL}/verify-otp`, {
         method: 'POST',

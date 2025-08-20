@@ -4,10 +4,10 @@
  */
 
 // Your backend API endpoint that reads Google Sheet via server.js
-const API_URL = 'https://localhost:3000/giftcard';
+const API_URL = 'http://localhost:3000/giftcard';
 
-// Gift card cache with 5-minute expiry using localStorage
-const GC_CACHE_DURATION = 2 * 60 * 1000; // 2 minutes
+// Gift card cache with 10-minute expiry using localStorage
+const GC_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
 const GC_CACHE_PREFIX = 'zepp_gc_';
 
 function getCachedGiftCard(domain) {
@@ -134,8 +134,8 @@ async function injectGiftCardBanner() {
             font-family: 'Funnel Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         #zepp-gc-toggle-btn {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: #242424;
             border-radius: 50%;
             border: none;
@@ -159,7 +159,7 @@ async function injectGiftCardBanner() {
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            width: 350px;
+            width: 300px;
             transition: all 0.3s ease;
             opacity: 0;
             overflow: hidden;
@@ -184,13 +184,13 @@ async function injectGiftCardBanner() {
     container.innerHTML = `
         <!-- The Gift Card Popup (matching content.js style) -->
         <div class="zepp-gc-popup" id="zepp-gc-popup">
-            <!-- Header Section with Dark Background -->
-            <div style="background: #242424; color: white; padding: 16px 20px; border-radius: 12px 12px 0 0;">
+            <!-- Header Section with White Background -->
+            <div style="background: #ffffff; color: black; padding: 16px 20px; border-radius: 12px 12px 0 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="font-weight: 600; font-size: 16px;">
-                        Zepp Saver
+                        ZEPP Saver
                     </div>
-                    <div style="display: flex; align-items: center;">
+                    <div style="display: flex; align-items: center; filter: invert(1)">
                         <img id="gcInfoIcon" style="height: 20px; margin-left: 10px; cursor: pointer;" />
                         <img id="gcSettingsIcon" style="height: 20px; margin-left: 10px; cursor: pointer;" />
                         <button id="zepp-gc-close-popup" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #ffffff; margin-left: 10px;">✕</button>
@@ -199,7 +199,7 @@ async function injectGiftCardBanner() {
             </div>
 
             <!-- Content Area with Light Gray Background -->
-            <div style="background: #ffffffff; padding: 10px; border-radius: 0 0 12px 12px;">
+            <div style="background: #ffffff; padding: 10px 0; border-radius: 0 0 12px 12px;">
               
               <!-- Gift Card Skeleton Loader -->
               <div id="giftCardSkeleton" style="display: none; margin-bottom: 16px;">
@@ -210,13 +210,14 @@ async function injectGiftCardBanner() {
                   position: relative;
                 ">
                   <div style="text-align: center;">
-                    <!-- Skeleton Discount Text -->
+                    
+                    <!-- Skeleton Discount Badge -->
                     <div style="
                       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
                       background-size: 200% 100%;
                       animation: shimmer 1.5s infinite;
-                      height: 30px;
                       width: 120px;
+                      height: 28px;
                       border-radius: 25px;
                       margin: 0 auto 12px auto;
                     "></div>
@@ -226,19 +227,28 @@ async function injectGiftCardBanner() {
                       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
                       background-size: 200% 100%;
                       animation: shimmer 1.5s infinite;
+                      width: 140px;
                       height: 20px;
-                      width: 150px;
                       border-radius: 4px;
                       margin: 0 auto 8px auto;
                     "></div>
                     
-                    <!-- Skeleton Description -->
+                    <!-- Skeleton Description Lines -->
                     <div style="
                       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
                       background-size: 200% 100%;
                       animation: shimmer 1.5s infinite;
-                      height: 16px;
                       width: 200px;
+                      height: 14px;
+                      border-radius: 4px;
+                      margin: 0 auto 6px auto;
+                    "></div>
+                    <div style="
+                      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                      background-size: 200% 100%;
+                      animation: shimmer 1.5s infinite;
+                      width: 160px;
+                      height: 14px;
                       border-radius: 4px;
                       margin: 0 auto 20px auto;
                     "></div>
@@ -248,19 +258,18 @@ async function injectGiftCardBanner() {
                       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
                       background-size: 200% 100%;
                       animation: shimmer 1.5s infinite;
-                      height: 40px;
                       width: 120px;
+                      height: 40px;
                       border-radius: 8px;
                       margin: 0 auto;
                     "></div>
                   </div>
                 </div>
               </div>
-              
-              <!-- Gift Card Section with White Background and Logo -->
+
+              <!-- Gift Card Section with White Background -->
               <div id="giftCardSection" style="display: none; margin-bottom: 16px;">
                 <div style="
-                  background: white;
                   border-radius: 12px;
                   position: relative;
                   opacity: 0;
@@ -273,17 +282,19 @@ async function injectGiftCardBanner() {
                     
                     <!-- Discount Highlight Text -->
                     <div style="
-                      background: linear-gradient(135deg, #687AE4 0%, #7c8ce8 100%);
+                      background: rgba(0, 0, 0, 1);
                       color: white;
                       padding: 8px 16px;
-                      border-radius: 25px;
                       font-size: 14px;
                       font-weight: 700;
                       margin-bottom: 12px;
-                      display: inline-block;
-                      box-shadow: 0 2px 8px rgba(104, 122, 228, 0.3);
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      width: 100%;
+                      height: 45px;
                     ">
-                      <span id="giftCardDiscountText">Save 25% now with</span>
+                      <span id="giftCardDiscountText">Save 20% now with</span>
                     </div>
                     
                     <h3 id="giftCardTitle" style="
@@ -292,46 +303,38 @@ async function injectGiftCardBanner() {
                       color: #333;
                       margin: 0 0 8px 0;
                     ">Gift Cards</h3>
-                    
-                    <p id="giftCardDesc" style="
-                      color: #666; 
-                      margin: 0 0 20px 0; 
-                      font-size: 14px;
-                      line-height: 1.4;
-                    ">Get instant discounts on your purchases</p>
+
+                    <!-- Gift Card Disclaimer -->
+                    <div style="
+                      margin: 16px;
+                      padding: 10px 12px;
+                      border-radius: 6px;
+                    ">
+                      <p style="
+                        font-size: 12px;
+                        color: #6c6c6cff;
+                        margin: 0;
+                        line-height: 1.3;
+                        text-align: center;
+                        font-weight: 600;
+                      ">
+                        💡 Apply Gift Card on checkout and pay less on your final bill
+                      </p>
+                    </div>
                     
                     <a id="giftCardCTA" href="#" target="_blank" style="
                       display: inline-block;
-                      background: linear-gradient(135deg, #687AE4 0%, #5a6fd8 100%);
+                      background: #000000;
                       color: white;
                       text-decoration: none;
                       padding: 12px 24px;
-                      border-radius: 8px;
+                      border-radius: 100px;
                       font-size: 14px;
                       font-weight: 600;
                       transition: all 0.3s ease;
                       box-shadow: 0 2px 8px rgba(104, 122, 228, 0.3);
                     ">Get your Gift Card</a>
                     
-                    <!-- Gift Card Disclaimer -->
-                    <div style="
-                      margin-top: 16px;
-                      padding: 10px 12px;
-                      background: #fff3cd;
-                      border-radius: 6px;
-                      border: 1px solid #ffeaa7;
-                    ">
-                      <p style="
-                        font-size: 12px;
-                        color: #856404;
-                        margin: 0;
-                        line-height: 1.3;
-                        text-align: center;
-                        font-weight: 600;
-                      ">
-                        💡 Applied on top of all coupons & discounts
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -382,24 +385,12 @@ async function injectGiftCardBanner() {
     // Function to update gift card content
     const updateGiftCardContent = () => {
         // Update gift card content with actual data
-        const giftCardLogo = document.getElementById('giftCardLogo');
         const giftCardDiscountText = document.getElementById('giftCardDiscountText');
         const giftCardTitle = document.getElementById('giftCardTitle');
-        const giftCardDesc = document.getElementById('giftCardDesc');
         const giftCardCTALink = document.getElementById('giftCardCTA');
         
-        if (giftCardLogo) giftCardLogo.textContent = cardData.title.charAt(0).toUpperCase();
         if (giftCardDiscountText) giftCardDiscountText.textContent = `Save ${cardData.discount}% now with`;
         if (giftCardTitle) giftCardTitle.textContent = cardData.title;
-        
-        // Update description based on authentication status
-        if (giftCardDesc) {
-            if (isAuthenticated) {
-                giftCardDesc.textContent = 'Get 1% extra as cashback';
-            } else {
-                giftCardDesc.textContent = cardData.desc;
-            }
-        }
         
         if (giftCardCTALink) {
             giftCardCTALink.textContent = cardData.cta;

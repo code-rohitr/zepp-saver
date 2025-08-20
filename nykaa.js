@@ -1,7 +1,7 @@
 console.log("Nykaa Running content script...");
 
-// Shop Now redirect cache with 30-minute expiry
-const SHOP_NOW_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+// Shop Now redirect cache with 2-hour expiry
+const SHOP_NOW_CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 const SHOP_NOW_CACHE_PREFIX = 'zepp_shop_redirect_';
 
 function getCachedShopRedirect(urlKey, userEmail) {
@@ -222,7 +222,7 @@ async function injectZeppPopup() {
     <div style="background: #ffffff; color: #000000; padding: 16px 20px; border-radius: 12px 12px 0 0;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="font-weight: 600; font-size: 16px;">
-          Zepp Saver
+          ZEPP Saver
         </div>
         <div style="display: flex; align-items: center; filter: invert(1);">
           <img id="settingsicon" style="height: 20px; margin-left: 10px; cursor: pointer;" />
@@ -232,7 +232,7 @@ async function injectZeppPopup() {
     </div>
 
     <!-- Content Area with white Background -->
-    <div style="background: #ffffff; padding: 10px 0; border-radius: 0 0 12px 12px;">
+    <div style="background: #ffffff; border-radius: 0 0 12px 12px;">
       
       <!-- Price Section (shown when authenticated) -->
       <div id="priceSection" style="display: none; background: white; border-radius: 8px; padding: 16px 0; margin-bottom: 16px;">
@@ -331,14 +331,17 @@ async function injectZeppPopup() {
             
             <!-- Discount Highlight Text -->
             <div style="
-              background: rgba(71, 85, 165, 0.1);
-              color: #4755A5;
+              background: rgba(0, 0, 0, 1);
+              color: white;
               padding: 8px 16px;
-              border-radius: 25px;
               font-size: 14px;
               font-weight: 700;
               margin-bottom: 12px;
-              display: inline-block;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 45px;
             ">
               <span id="giftCardDiscountText">Save 30% now with</span>
             </div>
@@ -357,13 +360,13 @@ async function injectZeppPopup() {
               padding: 10px 12px;
               border-radius: 6px;
             ">
-              <p style="
-                font-size: 12px;
+              <p id="giftCardDisclaimer" style="
+                font-size: 14px;
                 color: #6c6c6cff;
                 margin: 0;
                 line-height: 1.3;
                 text-align: center;
-                font-weight: 600;
+                font-weight: 500;
               ">
                 💡 Apply Gift Card on checkout and pay 7% less on your final bill
               </p>
@@ -371,7 +374,7 @@ async function injectZeppPopup() {
             
             <a id="giftCardCTA" href="#" target="_blank" style="
               display: inline-block;
-              background: linear-gradient(135deg, #687AE4 0%, #5a6fd8 100%);
+              background: #000000;
               color: white;
               text-decoration: none;
               padding: 12px 24px;
@@ -407,14 +410,13 @@ async function injectZeppPopup() {
         <!-- Initial Auth Prompt -->
         <div id="authPrompt" style="
           background: #f0f2fd;
-          border-radius: 12px;
+          border-radius: 0 0 12px;
           padding: 24px;
           text-align: center;
           color: #242424;
-          box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
         ">
           <div style="font-size: 14px; margin-bottom: 20px; line-height: 1.4;">
-            Unlock Exclusive Employee Discounts with your organization email<br>
+            Unlock Exclusive Student Discounts with your Institute email<br>
           </div>
           <button id="startLoginBtn" style="
             background: none;
@@ -427,9 +429,8 @@ async function injectZeppPopup() {
             font-size: 14px;
             width: 100%;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          " onmouseover="this.style.background='white'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='rgba(255,255,255,0.95)'; this.style.transform='translateY(0)'">
-            Verify Employee Email
+          " onmouseover="this.style.transform='translateY(-1px)'"; this.style.transform='translateY(0)'">
+            Verify Student  Email
           </button>
         </div>
 
@@ -437,7 +438,25 @@ async function injectZeppPopup() {
         <div id="loginForm" style="display: none; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
           <div id="emailStep">
             <div style="margin-bottom: 16px;">
-              <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px;">Student Email</label>
+              <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                <button 
+                  id="cancelLoginBtn"
+                  style="
+                    background: none;
+                    border: none;
+                    color: #666;
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 4px;
+                    margin-right: 8px;
+                    transition: color 0.3s ease;
+                  "
+                  title="Go back"
+                >
+                  ←
+                </button>
+                <label style="color: #333; font-weight: 500; font-size: 14px; margin: 0;">Student Email</label>
+              </div>
               <input 
                 type="email" 
                 id="studentEmail" 
@@ -465,27 +484,10 @@ async function injectZeppPopup() {
                 font-size: 14px;
                 font-weight: 600;
                 cursor: pointer;
-                margin-bottom: 12px;
                 transition: background 0.3s ease;
               "
             >
               Send OTP
-            </button>
-            <button 
-              id="cancelLoginBtn"
-              style="
-                width: 100%;
-                padding: 10px;
-                background: none;
-                color: #666;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                font-size: 12px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-              "
-            >
-              Cancel
             </button>
           </div>
           
@@ -607,7 +609,7 @@ async function injectZeppPopup() {
   // Set icons
   // NOTE: These will still be loaded even though the popup is initially hidden
   document.getElementById('zeppIcon').src = chrome.runtime.getURL('icon.png');
-  
+
   // Add settings icon click handler
   document.getElementById('settingsicon').src = chrome.runtime.getURL('settings.svg');
   document.getElementById('settingsicon').addEventListener('click', () => {
@@ -702,7 +704,7 @@ async function injectZeppPopup() {
           // Remove direct href - we'll handle this via click event
           ctaBtn.removeAttribute('href');
           ctaBtn.style.cursor = 'pointer';
-          
+
           // Add click handler for login-with-email
           ctaBtn.onclick = async (e) => {
             e.preventDefault();
@@ -827,8 +829,8 @@ async function loadGiftCardIfNeeded(productID) {
   }
 }
 
-// Gift card cache with 5-minute expiry using localStorage
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Gift card cache with 15-minute expiry using localStorage
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 const CACHE_PREFIX = 'zepp_gc_';
 
 function getCachedGiftCard(domain) {
@@ -931,12 +933,12 @@ async function loadGiftCardForPopup(isAuthenticated = false) {
 
 async function showPriceComparison(productID, isAuthenticated) {
   console.log('💰 Showing price comparison for authenticated user with ZEPP price available');
-  
+
   try {
     // Update visibility of price section and shop button
     updatePriceSectionVisibility(isAuthenticated, true);
     updateShopNowButtonVisibility(isAuthenticated, true);
-    
+
     // Fetch ZEPP price data
     const response = await fetch(`http://localhost:3000/api/price?id_type=nyka_sku&id_value=${productID}`);
     if (response.ok) {
@@ -946,11 +948,11 @@ async function showPriceComparison(productID, isAuthenticated) {
         const splpriceAttr = item.custom_attributes?.find(attr => attr.attribute_code === "special_price");
         const surchargeAttr = item.custom_attributes?.find(attr => attr.attribute_code === "productsurcharge_fee");
         const urlAttr = item.custom_attributes?.find(attr => attr.attribute_code === "url_key");
-        
+
         const splprice = splpriceAttr ? parseFloat(splpriceAttr.value) : 0;
         const surcharge = surchargeAttr ? parseFloat(surchargeAttr.value) : 0;
         const zeppPrice = splprice + surcharge;
-        
+
         // Set up Shop Now button click handler with url_key
         if (urlAttr && urlAttr.value) {
           const ctaBtn = document.getElementById("ctaBtn");
@@ -964,21 +966,21 @@ async function showPriceComparison(productID, isAuthenticated) {
             };
           }
         }
-        
+
         // Update the UI with ZEPP price
         const sheetPriceElement = document.getElementById('sheetPrice');
         const savingsElement = document.getElementById('savings');
         const nykaaPriceElement = document.getElementById('nykaaPrice');
-        
+
         if (sheetPriceElement && zeppPrice > 0) {
           sheetPriceElement.textContent = formatIndianCurrency(zeppPrice);
           sheetPriceElement.style.color = '#687AE4';
-          
+
           // Calculate and show savings
           if (nykaaPriceElement && savingsElement) {
             const nykaaPriceText = nykaaPriceElement.textContent;
             const nykaaPrice = parseFloat(nykaaPriceText.replace(/[^\d.]/g, ''));
-            
+
             if (nykaaPrice > zeppPrice) {
               const savings = nykaaPrice - zeppPrice;
               savingsElement.textContent = `You save ${formatIndianCurrency(savings)}`;
@@ -992,7 +994,7 @@ async function showPriceComparison(productID, isAuthenticated) {
               savingsElement.style.color = '#6c757d';
             }
           }
-          
+
           console.log('✅ Price comparison displayed successfully');
         } else {
           console.log('❌ Invalid ZEPP price data');
@@ -1044,6 +1046,7 @@ function displayGiftCardInPopup(cardData, isAuthenticated = false) {
   const giftCardCTA = document.getElementById('giftCardCTA');
   const giftCardDiscount = document.getElementById('giftCardDiscount');
   const giftCardDiscountText = document.getElementById('giftCardDiscountText');
+  const giftCardDisclaimer = document.getElementById('giftCardDisclaimer');
   const closeGiftCard = document.getElementById('closeGiftCard');
 
   if (!giftCardSection) {
@@ -1079,6 +1082,12 @@ function displayGiftCardInPopup(cardData, isAuthenticated = false) {
   if (giftCardDiscountText && cardData.discount) {
     giftCardDiscountText.textContent = `Save ${cardData.discount}% now with`;
     console.log('✨ Discount text updated:', `Save ${cardData.discount}% now with`);
+  }
+  
+  // Update disclaimer text with dynamic discount percentage
+  if (giftCardDisclaimer && cardData.discount) {
+    giftCardDisclaimer.textContent = `💡 Buy Nykaa Gift Cards at ${cardData.discount}% off and use them at full value.`;
+    console.log('✨ Disclaimer text updated with discount:', `${cardData.discount}%`);
   }
 
   // Hide skeleton first
@@ -1550,6 +1559,24 @@ async function handleSendOtp() {
 
   // Send OTP via API
   try {
+    // Check if authManager is available
+    if (!window.authManager) {
+      console.log('AuthManager not available, waiting...');
+      // Wait for authManager to be available
+      let attempts = 0;
+      while (!window.authManager && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+      
+      if (!window.authManager) {
+        showInlineLoginMessage('Authentication system not loaded. Please refresh the page.', 'error');
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send';
+        return;
+      }
+    }
+    
     const result = await window.authManager.sendOTP(email);
 
     if (result.success) {
@@ -1566,7 +1593,7 @@ async function handleSendOtp() {
   }
 
   sendBtn.disabled = false;
-  sendBtn.textContent = 'Send OTP';
+  sendBtn.textContent = 'Send';
 }
 
 async function handleVerifyOtp() {
@@ -1586,7 +1613,27 @@ async function handleVerifyOtp() {
 
   // Verify OTP via API
   try {
+    // Check if authManager is available
+    if (!window.authManager) {
+      console.log('AuthManager not available, waiting...');
+      // Wait for authManager to be available
+      let attempts = 0;
+      while (!window.authManager && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+      
+      if (!window.authManager) {
+        showInlineLoginMessage('Authentication system not loaded. Please refresh the page.', 'error');
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Verify & Login';
+        return;
+      }
+    }
+    
+    console.log('Verifying OTP:', { email, otp: otp.substring(0, 2) + '****' });
     const result = await window.authManager.verifyOTP(email, otp);
+    console.log('OTP verification result:', result);
 
     if (result.success) {
       // Clean up temp data

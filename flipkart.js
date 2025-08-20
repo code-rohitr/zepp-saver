@@ -242,8 +242,8 @@ async function injectAutoPopupWithData(fsn, price) {
             
             <!-- Discount Highlight Text -->
             <div style="
-              background: rgba(71, 85, 165, 0.1);
-              color: black;
+              background: rgba(0, 0, 0, 1);
+              color: white;
               padding: 8px 16px;
               font-size: 14px;
               font-weight: 700;
@@ -270,7 +270,7 @@ async function injectAutoPopupWithData(fsn, price) {
               padding: 10px 12px;
               border-radius: 6px;
             ">
-              <p style="
+              <p id="giftCardDisclaimer" style="
                 font-size: 12px;
                 color: #6c6c6cff;
                 margin: 0;
@@ -285,7 +285,7 @@ async function injectAutoPopupWithData(fsn, price) {
             
             <a id="giftCardCTA" href="#" target="_blank" style="
               display: inline-block;
-              background: linear-gradient(135deg, #687AE4 0%, #5a6fd8 100%);
+              background: #000000;
               color: white;
               text-decoration: none;
               padding: 12px 24px;
@@ -327,7 +327,7 @@ async function injectAutoPopupWithData(fsn, price) {
           background: #f0f2fd;
         ">
           <div style="font-size: 14px; line-height: 1.4;">
-            Unlock Exclusive Employee Discounts with your organization email<br>
+            Unlock Exclusive Student Discounts with your Institution email<br>
           </div>
           <button id="startLoginBtn" style="
             color: #667eea;
@@ -349,7 +349,25 @@ async function injectAutoPopupWithData(fsn, price) {
         <div id="loginForm" style="display: none; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
           <div id="emailStep">
             <div style="margin-bottom: 16px;">
-              <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px;">Student Email</label>
+              <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                <button 
+                  id="cancelLoginBtn"
+                  style="
+                    background: none;
+                    border: none;
+                    color: #666;
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 4px;
+                    margin-right: 8px;
+                    transition: color 0.3s ease;
+                  "
+                  title="Go back"
+                >
+                  ←
+                </button>
+                <label style="color: #333; font-weight: 500; font-size: 14px; margin: 0;">Student Email</label>
+              </div>
               <input 
                 type="email" 
                 id="studentEmail" 
@@ -377,27 +395,10 @@ async function injectAutoPopupWithData(fsn, price) {
                 font-size: 14px;
                 font-weight: 600;
                 cursor: pointer;
-                margin-bottom: 12px;
                 transition: background 0.3s ease;
               "
             >
-              Send OTP
-            </button>
-            <button 
-              id="cancelLoginBtn"
-              style="
-                width: 100%;
-                padding: 10px;
-                background: none;
-                color: #666;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                font-size: 12px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-              "
-            >
-              Cancel
+              Send
             </button>
           </div>
           
@@ -598,7 +599,7 @@ async function injectAutoPopupWithData(fsn, price) {
         if (price && savingsEl) {
           const targetSavings = Math.abs(price - finalPrice);
           savingsEl.textContent = formatIndianCurrency(targetSavings);
-          savingsEl.style.color = "#242424";
+          savingsEl.style.color = "#4755A5";
         }
 
         const urlAttr = data.items[0].custom_attributes?.find(attr => attr.attribute_code === "url_key");
@@ -712,8 +713,8 @@ async function loadGiftCardIfNeeded(fsn) {
   }
 }
 
-// Gift card cache with 5-minute expiry using localStorage
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Gift card cache with 15-minute expiry using localStorage
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 const CACHE_PREFIX = 'zepp_gc_';
 
 function getCachedGiftCard(domain) {
@@ -857,7 +858,7 @@ async function showPriceComparison(fsn, isAuthenticated) {
 
         if (sheetPriceElement && zeppPrice > 0) {
           sheetPriceElement.textContent = formatIndianCurrency(zeppPrice);
-          sheetPriceElement.style.color = '#687AE4';
+          sheetPriceElement.style.color = '#4755A5';
 
           // Calculate and show savings
           if (flipkartPriceElement && savingsElement) {
@@ -929,6 +930,7 @@ function displayGiftCardInPopup(cardData, isAuthenticated = false) {
   const giftCardCTA = document.getElementById('giftCardCTA');
   const giftCardDiscount = document.getElementById('giftCardDiscount');
   const giftCardDiscountText = document.getElementById('giftCardDiscountText');
+  const giftCardDisclaimer = document.getElementById('giftCardDisclaimer');
   const closeGiftCard = document.getElementById('closeGiftCard');
 
   if (!giftCardSection) {
@@ -964,6 +966,12 @@ function displayGiftCardInPopup(cardData, isAuthenticated = false) {
   if (giftCardDiscountText && cardData.discount) {
     giftCardDiscountText.textContent = `Save ${cardData.discount}% now with`;
     console.log('✨ Discount text updated:', `Save ${cardData.discount}% now with`);
+  }
+  
+  // Update disclaimer text with dynamic discount percentage
+  if (giftCardDisclaimer && cardData.discount) {
+    giftCardDisclaimer.textContent = `💡 Apply Gift Card on checkout and pay ${cardData.discount}% less on your final bill`;
+    console.log('✨ Disclaimer text updated with discount:', `${cardData.discount}%`);
   }
 
   // Hide skeleton first
@@ -1446,7 +1454,7 @@ async function handleSendOtp() {
   }
 
   sendBtn.disabled = false;
-  sendBtn.textContent = 'Send OTP';
+  sendBtn.textContent = 'Send';
 }
 
 async function handleVerifyOtp() {
@@ -1503,8 +1511,8 @@ function clearInlineLoginMessage() {
   }
 }
 
-// Shop Now redirect cache with 30-minute expiry
-const SHOP_NOW_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+// Shop Now redirect cache with 2-hour expiry
+const SHOP_NOW_CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 const SHOP_NOW_CACHE_PREFIX = 'zepp_shop_redirect_';
 
 function getCachedShopRedirect(urlKey, userEmail) {

@@ -1,8 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Amazon & Flipkart Price Checker",
-  "version": "1.0",
-  "description": "Compare prices on Amazon and Flipkart with your sheet prices.",
+  "name": "ZEPP Saver - Student Price Comparison",
+  "version": "1.0.0",
+  "description": "Compare prices across Amazon, Flipkart, and Nykaa with student discounts and gift card offers.",
+  "author": "ZEPP Team",
+  "short_name": "ZEPP Saver",
   "permissions": [
     "activeTab",
     "scripting",
@@ -15,8 +17,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.amazon.in/*",
-        "https://www.amazon.in/cart"
+        "https://www.amazon.in/*"
       ],
       "js": [
         "auth.js",
@@ -109,8 +110,8 @@
         "https://uber.com/*",
         "https://www.zomato.com/*",
         "https://zomato.com/*",
-        "https://www.jockey.com/*",
-        "https://jockey.com/*",
+        "https://www.jockey.in/*",
+        "https://jockey.in/*",
         "https://www.nykaa.com/*",
         "https://nykaa.com/*",
         "https://www.swiggy.com/*",
@@ -144,7 +145,30 @@
         "gc.js"
       ],
       "matches": [
-        "<all_urls>"
+        "https://www.amazon.in/*",
+        "https://amazon.in/*",
+        "https://www.flipkart.com/*",
+        "https://flipkart.com/*",
+        "https://www.zeptonow.com/*",
+        "https://zeptonow.com/*",
+        "https://pizzaonline.dominos.co.in/*",
+        "https://dominos.co.in/*",
+        "https://www.uber.com/*",
+        "https://uber.com/*",
+        "https://www.zomato.com/*",
+        "https://zomato.com/*",
+        "https://www.jockey.in/*",
+        "https://jockey.in/*",
+        "https://www.nykaa.com/*",
+        "https://nykaa.com/*",
+        "https://www.swiggy.com/*",
+        "https://swiggy.com/*",
+        "https://www.bigbasket.com/*",
+        "https://bigbasket.com/*",
+        "https://www.myntra.com/*",
+        "https://myntra.com/*",
+        "https://www.primevideo.com/*",
+        "https://primevideo.com/*"
       ]
     }
   ],

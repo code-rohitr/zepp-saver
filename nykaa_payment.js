@@ -103,8 +103,8 @@ function initializePaymentScript() {
   console.log('🎯 Nykaa Payment Script Initialized');
 }
 
-// Gift card cache with 5-minute expiry using localStorage (Payment specific)
-const PAYMENT_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Gift card cache with 15-minute expiry using localStorage (Payment specific)
+const PAYMENT_CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 const PAYMENT_CACHE_PREFIX = 'zepp_gc_';
 
 function getPaymentCachedGiftCard(domain) {
@@ -347,7 +347,7 @@ function createPaymentDiscountPopup(originalPrice, discountPercentage, finalPric
     <div style="background: #ffffff; color: black; padding: 16px 20px; border-radius: 12px 12px 0 0;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="font-weight: 600; font-size: 16px;">
-          Zepp Saver
+          ZEPP Saver
         </div>
         <div style="display: flex; align-items: center; filter: invert(1);">
           <img id="infoicon" style="height: 20px; margin-left: 10px; cursor: pointer;" />
@@ -405,7 +405,7 @@ function createPaymentDiscountPopup(originalPrice, discountPercentage, finalPric
             
             <a href="${cardData.link || '#'}" target="_blank" style="
               display: inline-block;
-              background: #4755A5;
+              background: #000000;
               color: white;
               text-decoration: none;
               padding: 12px 24px;

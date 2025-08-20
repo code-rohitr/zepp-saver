@@ -1,8 +1,9 @@
 Test Category,Test Case ID,Test Case Description,Priority,Expected Result,Test Steps,Status,Notes
 Security Testing,SEC-001,Authentication Bypass Prevention,Critical,"OTP '123456' should fail, no hardcoded authentication","1. Enter any email address
 2. Try OTP '123456' 
-3. Verify authentication fails
-4. Check console for no hardcoded credential warnings",Pending,Must pass for Chrome Store submission
+3. Verify authentication fails with 'Invalid OTP' message
+4. Check console for no hardcoded credential warnings
+5. Test other common OTPs: 000000, 111111, 999999",PASSED,✅ FIXED - Hardcoded OTP fallback completely removed from auth.js
 Security Testing,SEC-002,HTTPS Communication Verification,Critical,All API calls use HTTPS protocol,"1. Open Developer Tools Network tab
 2. Perform login and price checking actions
 3. Verify all requests use https:// protocol
@@ -203,3 +204,140 @@ Localization Testing,LOCAL-001,Text Display,Low,All text displays correctly in d
 2. Verify text encoding
 3. Check for text overflow issues
 4. Test right-to-left languages if supported",Pending,International user support
+Recent Updates Testing,UPDATE-001,Conditional Price Comparison Logic,High,"Price comparison shows only when status=1 AND ZEPP price < platform price, otherwise shows gift cards","1. Test with status=0 (inactive product) - should show gift cards
+2. Test with ZEPP price >= platform price - should show gift cards  
+3. Test with status=1 AND ZEPP price < platform price - should show price comparison
+4. Verify Shop Now button visibility follows same logic",Pending,Core business logic update - critical for user experience
+Recent Updates Testing,UPDATE-002,White Header Design Consistency,Medium,All popups use white headers with proper icon visibility,"1. Test all platforms: Amazon, Flipkart, Nykaa
+2. Verify header background is #ffffff (white)
+3. Check text color is black for readability
+4. Confirm icons have filter: invert(1) for visibility
+5. Test cart pages and payment pages",Pending,UI consistency across all platforms
+Recent Updates Testing,UPDATE-003,300px Popup Width Standardization,Medium,All popups are exactly 300px wide for consistency,"1. Inspect popup elements on all platforms
+2. Measure width using DevTools
+3. Test: content.js, flipkart.js, nykaa.js, cart pages
+4. Verify responsive behavior at different zoom levels",PASSED,✅ VERIFIED - All popups standardized to 300px width
+Recent Updates Testing,UPDATE-004,Trigger Icon Brand Color,Low,All trigger icons use #4755A5 brand color instead of black,"1. Inspect trigger icon background color
+2. Test all files: content.js, flipkart.js, nykaa.js, cart files, payment files
+3. Verify color consistency across platforms
+4. Check icon visibility and contrast",PASSED,✅ VERIFIED - All trigger icons updated to #4755A5 brand color
+Recent Updates Testing,UPDATE-005,Payment Page UI Synchronization,Medium,Payment pages (amazon_payment.js, flipkart_payment.js, nykaa_payment.js) have consistent white header design,"1. Navigate to checkout pages on each platform
+2. Verify white header with inverted icons
+3. Test payment amount detection accuracy
+4. Check gift card discount calculations
+5. Verify popup styling consistency",PASSED,✅ VERIFIED - All payment pages synchronized with white header design
+Security Enhancements Testing,SEC-ENHANCE-001,DOM XSS Prevention,Critical,Malicious product names cannot execute JavaScript,"1. Intercept API responses and inject: <script>alert('XSS')</script>
+2. Test with product names containing HTML tags
+3. Verify content is escaped before DOM insertion
+4. Check console for no script execution warnings
+5. Test all popup injection points",FAILED,🔴 CRITICAL - Extension still vulnerable to XSS via innerHTML usage
+Security Enhancements Testing,SEC-ENHANCE-002,Console Data Exposure Elimination,High,No sensitive user data appears in browser console,"1. Complete authentication flow
+2. Monitor console during price checks and API calls
+3. Search for: email addresses, loginLink, authData, OTP codes
+4. Verify only generic debug messages appear
+5. Test Shop Now button clicks",FAILED,🔴 HIGH RISK - Extensive logging of emails and API responses still present
+Security Enhancements Testing,SEC-ENHANCE-003,Open Redirect Prevention,High,Shop Now button validates URLs before opening,"1. Intercept login-with-email API response
+2. Modify loginLink to malicious URL: https://evil.com/phish
+3. Click Shop Now button
+4. Verify URL validation prevents malicious redirects
+5. Test with various malicious URL formats",FAILED,🔴 HIGH RISK - No URL validation implemented, accepts any API response
+Security Enhancements Testing,SEC-ENHANCE-004,LocalStorage Data Protection,Medium,Sensitive data is encrypted or uses Chrome secure storage,"1. Examine localStorage after authentication
+2. Check for plain text emails in cache data
+3. Verify Shop Now redirect cache doesn't expose sensitive info
+4. Test gift card cache security
+5. Validate session data protection",FAILED,🔴 MEDIUM RISK - Emails stored in plain text in localStorage
+API Integration Testing,API-ENHANCED-001,Price API Status Field Handling,High,"Extension properly handles product status field (1=active, 0=inactive) in conditional logic","1. Mock API response with status: 0
+2. Verify gift card shows instead of price comparison
+3. Mock API response with status: 1 and valid pricing
+4. Confirm price comparison displays correctly
+5. Test edge case with missing status field",Pending,Critical for business logic accuracy
+API Integration Testing,API-ENHANCED-002,Login-with-Email API Integration,High,Shop Now button uses login-with-email API with proper caching,"1. Test Shop Now button click for authenticated user
+2. Verify API call to /api/login-with-email endpoint
+3. Check 30-minute caching mechanism works
+4. Test direct redirect for cached sessions
+5. Verify loading states during API calls",Pending,Core functionality for ZEPP platform access
+Cart Integration Testing,CART-ENHANCED-001,Amazon Cart UI Improvements,Medium,Amazon cart popup uses enhanced UI design matching flipkartcart.js,"1. Add multiple products to Amazon cart
+2. Navigate to cart page
+3. Verify white header design with inverted icons
+4. Check improved typography: 14px labels, 16px prices
+5. Test Shop Now button styling and functionality",PASSED,✅ VERIFIED - Amazon cart UI synchronized with Flipkart design
+Cart Integration Testing,CART-ENHANCED-002,Multi-Product Price Calculation,High,Cart pages correctly calculate total savings across multiple items,"1. Add 3+ products with different ZEPP discounts
+2. Verify individual item savings calculations
+3. Check total savings aggregation accuracy
+4. Test with mix of available/unavailable ZEPP prices
+5. Verify currency formatting consistency",Pending,Financial calculation accuracy critical
+Payment Integration Testing,PAY-ENHANCED-001,Payment Amount Extraction Accuracy,High,Payment pages accurately extract checkout amounts from DOM,"1. Navigate to checkout with known total amount
+2. Verify payment popup shows correct original price
+3. Test discount calculation accuracy
+4. Check gift card percentage application
+5. Test on different payment page layouts",Pending,Critical for discount calculation accuracy
+Payment Integration Testing,PAY-ENHANCED-002,SPA Navigation Detection,Medium,Nykaa payment detection works correctly with Single Page Application navigation,"1. Navigate from product → address → payment pages
+2. Verify popup only appears on actual payment page
+3. Test back/forward navigation behavior
+4. Check URL pattern matching accuracy
+5. Verify no false positives on address pages",Pending,User experience on SPA platforms
+Error Handling Testing,ERROR-ENHANCED-001,API Failure Graceful Degradation,High,"When price API fails, extension shows gift cards instead of crashing","1. Disconnect internet or stop backend server
+2. Navigate to product page
+3. Verify gift card section displays
+4. Check no JavaScript errors in console
+5. Test recovery when connection restored",Pending,System resilience under failure conditions
+Error Handling Testing,ERROR-ENHANCED-002,Malformed API Response Handling,Medium,Extension handles invalid JSON and missing fields gracefully,"1. Mock API to return invalid JSON
+2. Mock API with missing required fields (status, special_price)
+3. Verify extension doesn't crash
+4. Check appropriate error handling
+5. Verify fallback to gift cards works",Pending,Data validation and error resilience
+Performance Testing,PERF-ENHANCED-001,Caching System Effectiveness,Medium,Shop Now redirect caching reduces API calls and improves performance,"1. Click Shop Now button for first time (cache miss)
+2. Measure API response time
+3. Click Shop Now again within 30 minutes (cache hit)
+4. Verify faster response and no API call
+5. Test cache expiration after 30 minutes",Pending,Performance optimization validation
+Performance Testing,PERF-ENHANCED-002,Memory Leak Prevention,Medium,Extension doesn't accumulate memory over time during navigation,"1. Navigate through 20+ product pages
+2. Monitor memory usage in Chrome Task Manager
+3. Check for event listener accumulation
+4. Verify popup cleanup on navigation
+5. Test garbage collection behavior",Pending,Long-term stability testing
+Business Logic Testing,LOGIC-001,Price Comparison Priority Rules,Critical,"Extension correctly prioritizes: authenticated + ZEPP cheaper = price comparison; else gift cards","1. Test unauthenticated user → should show gift cards
+2. Test authenticated + ZEPP more expensive → should show gift cards
+3. Test authenticated + ZEPP cheaper + status≠1 → should show gift cards
+4. Test authenticated + ZEPP cheaper + status=1 → should show price comparison
+5. Verify Shop Now button follows same logic",Pending,Core business logic validation - affects revenue and user experience
+Business Logic Testing,LOGIC-002,Currency Formatting Consistency,Medium,All prices display in Indian currency format (₹24,00,000) consistently,"1. Test prices across all platforms
+2. Verify lakhs/crores formatting
+3. Check decimal handling
+4. Test very large and very small amounts
+5. Verify consistent comma placement",PASSED,✅ VERIFIED - formatIndianCurrency function works correctly across all files
+User Experience Testing,UX-ENHANCED-001,Authentication Flow Smoothness,High,Complete login process is intuitive and provides clear feedback,"1. Test email validation with various formats
+2. Verify OTP step transition smoothness
+3. Check loading states and button disabling
+4. Test error message clarity and positioning
+5. Verify success message and page refresh",Pending,Critical for user adoption and retention
+User Experience Testing,UX-ENHANCED-002,Shop Now Button User Journey,High,Shop Now button provides smooth transition to ZEPP platform,"1. Click Shop Now button when authenticated
+2. Verify loading state during API call
+3. Check new tab opens to correct ZEPP product page
+4. Test caching prevents repeated API calls
+5. Verify error handling if API fails",Pending,Core conversion funnel functionality
+User Experience Testing,UX-ENHANCED-003,Gift Card Alternative Experience,Medium,When price comparison unavailable, gift cards provide valuable alternative,"1. Test gift card display for unauthenticated users
+2. Verify discount percentages and descriptions
+3. Test gift card CTA functionality
+4. Check different messaging for authenticated users
+5. Verify skeleton loading animation",Pending,Alternative value proposition validation
+Regression Testing,REGRESS-001,Security Fix Regression Prevention,Critical,Ensure removed security vulnerabilities don't reappear,"1. Verify OTP fallback removal persists after code changes
+2. Check no new hardcoded credentials introduced
+3. Validate console logging doesn't regress
+4. Ensure HTTPS migration when implemented stays enforced
+5. Monitor for new XSS vulnerabilities",Pending,Continuous security validation
+Regression Testing,REGRESS-002,UI Consistency Maintenance,Medium,Recent UI improvements maintain consistency across updates,"1. Verify 300px popup width stays consistent
+2. Check white header design persists
+3. Validate trigger icon color remains #4755A5
+4. Ensure payment page synchronization maintained
+5. Test cart page UI improvements stay intact",Pending,UI/UX consistency over time
+Compliance Testing,COMPLIANCE-001,Data Minimization Validation,Critical,Extension only collects and processes necessary user data,"1. Audit all data collection points
+2. Verify email is only collected for authentication
+3. Check no unnecessary personal data gathered
+4. Validate data retention policies
+5. Ensure user consent mechanisms",Pending,Privacy regulation compliance (GDPR, CCPA)
+Compliance Testing,COMPLIANCE-002,Security Audit Compliance,Critical,Extension passes security audit requirements for enterprise deployment,"1. Document all security fixes implemented
+2. Verify no critical vulnerabilities remain
+3. Check encryption of sensitive data
+4. Validate secure communication protocols
+5. Ensure audit trail for security events",FAILED,🔴 CRITICAL - Multiple high-severity security issues remain unresolved

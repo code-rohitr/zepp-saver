@@ -690,7 +690,46 @@ POST http://localhost:3000/api/verify-otp (authentication)
 - ✅ `flipkart_payment.js` - Updated trigger icon color to #4755A5  
 - ✅ `nykaa_payment.js` - Updated trigger icon color to #4755A5
 - ✅ `flipkart copy.js` - Updated trigger icon color to #4755A5
-- ✅ `flipkart_backup.js` - Updated trigger icon color to #4755A5  
+- ✅ `flipkart_backup.js` - Updated trigger icon color to #4755A5
+
+### Recent Session Updates:
+
+#### 🔧 **Bug Fixes & Optimizations:**
+
+1. **Cache System Enhancement**
+   - ✅ Increased TTL values across all files for better performance:
+     - Gift cards: 5 min → 15 min
+     - Shop redirects: 30 min → 2 hours  
+     - Payment cache: 5 min → 15 min
+     - Generic GC: 2 min → 10 min
+
+2. **Price Comparison Caching**
+   - ✅ Implemented comprehensive price comparison caching (later reverted per user request)
+   - ✅ Added cache functions: getCachedPriceComparison(), setCachedPriceComparison()
+   - ✅ Created processing functions for structured data handling
+   - ✅ Applied to content.js, flipkart.js, and nykaa.js
+   - ✅ **Reverted**: Removed all price caching to restore original fetch logic
+
+3. **Gift Card System Fixes**
+   - ✅ **Fixed SSL Protocol Error**: Changed gc.js API_URL from `https://localhost:3000/giftcard` to `http://localhost:3000/giftcard`
+   - ✅ **UI Standardization**: Updated gc.js gift card UI to match content.js exactly
+   - ✅ **Header Consistency**: Applied white header design (#ffffff) with black text to gc.js
+   - ✅ **Visual Parity**: Ensured skeleton loader and gift card section match content.js structure
+
+#### 🎨 **UI/UX Improvements:**
+
+1. **gc.js Universal Gift Card System**
+   - ✅ Updated popup width to 300px for consistency
+   - ✅ Applied white header design matching content.js
+   - ✅ Implemented exact gift card UI structure from content.js
+   - ✅ Fixed trigger button size to 50px (matching other scripts)
+   - ✅ Added proper discount highlighting and rounded CTA buttons
+
+2. **Cross-Platform Design Consistency**
+   - ✅ All popups now use consistent white headers with black text
+   - ✅ Unified trigger icon styling with #4755A5 brand color
+   - ✅ Standardized popup dimensions (300px width, 50px trigger buttons)
+   - ✅ Applied consistent gift card UI across content.js and gc.js  
 
 ### Security Status:
 🔴 **Previously**: Multiple critical vulnerabilities (hardcoded OTP, unencrypted HTTP, XSS risks)

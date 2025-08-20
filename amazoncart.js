@@ -1,8 +1,8 @@
 (function() {
 console.log("Amazon Cart - ZEPP Saver Running...");
 
-// Shop Now redirect cache with 30-minute expiry (scoped to avoid conflicts)
-const SHOP_NOW_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+// Shop Now redirect cache with 2-hour expiry (scoped to avoid conflicts)
+const SHOP_NOW_CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 const SHOP_NOW_CACHE_PREFIX = 'zepp_shop_redirect_cart_';
 
 function getCachedShopRedirect(urlKey, userEmail) {
@@ -39,6 +39,7 @@ function setCachedShopRedirect(urlKey, userEmail) {
     console.error('Error saving redirect cache:', error);
   }
 }
+
 
 // Helper function to handle Shop Now button click
 async function handleShopNowClick(urlKey) {
@@ -312,17 +313,6 @@ async function showCartPopup(results, totalSavings) {
                 </div>
             </div>
 
-            <!-- Authentication Section -->
-            <div id="authSection" style="display: ${isAuthenticated ? 'none' : 'block'}; margin-top: 16px;">
-                <div style="background: #f8f9fa; border-radius: 8px; padding: 16px; text-align: center; border: 1px solid #e9ecef;">
-                    <div style="font-size: 14px; color: #666; margin-bottom: 12px;">
-                        Login to access Shop Now buttons and personalized deals
-                    </div>
-                    <div style="font-size: 12px; color: #999;">
-                        Visit any Amazon product page to login with ZEPP Saver
-                    </div>
-                </div>
-            </div>
         </div>
     `;
 

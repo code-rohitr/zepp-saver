@@ -90,8 +90,8 @@ function initializePaymentScript() {
   }
 }
 
-// Payment Gift card cache with 5-minute expiry using localStorage
-const PAYMENT_GC_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Payment Gift card cache with 15-minute expiry using localStorage
+const PAYMENT_GC_CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 const PAYMENT_GC_CACHE_PREFIX = 'zepp_payment_gc_';
 
 function getPaymentCachedGiftCard(domain) {
@@ -451,7 +451,7 @@ function createPaymentDiscountPopup(originalPrice, discountPercentage, finalPric
             
             <a href="${cardData.link || '#'}" target="_blank" style="
               display: inline-block;
-              background: #4755A5;
+              background: #000000;
               color: white;
               text-decoration: none;
               padding: 12px 24px;
